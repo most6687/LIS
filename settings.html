@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الإعدادات - نظام معلومات المختبر</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="settings.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- الشريط الجانبي -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-flask"></i>
+                <h2>نظام المختبر LIS</h2>
+            </div>
+            <ul class="menu">
+                <li><a href="index.html"><i class="fas fa-tachometer-alt"></i> لوحة التحكم</a></li>
+                <li><a href="users.html"><i class="fas fa-users"></i> إدارة المستخدمين</a></li>
+                <li><a href="permissions.html"><i class="fas fa-user-shield"></i> إدارة الصلاحيات</a></li>
+                <li><a href="statistics.html"><i class="fas fa-chart-bar"></i> الإحصائيات</a></li>
+                <li><a href="audit.html"><i class="fas fa-history"></i> Audit Trail</a></li>
+                <li class="active"><a href="settings.html"><i class="fas fa-cog"></i> الإعدادات</a></li>
+            </ul>
+            <div class="user-info">
+                <img src="https://ui-avatars.com/api/?name=مسؤول+النظام&background=0D8ABC&color=fff" alt="صورة المستخدم">
+                <div>
+                    <h4>مسؤول النظام</h4>
+                    <p>Admin</p>
+                </div>
+                <a href="logout.html" class="logout"><i class="fas fa-sign-out-alt"></i></a>
+            </div>
+        </aside>
+
+        <!-- المحتوى الرئيسي -->
+        <main class="main-content">
+            <!-- الشريط العلوي -->
+            <header class="topbar">
+                <div class="search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="ابحث في الإعدادات...">
+                </div>
+                <div class="topbar-right">
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">4</span>
+                    </div>
+                    <div class="date-display">
+                        <i class="far fa-calendar-alt"></i>
+                        <span id="current-date">--/--/----</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- محتوى الإعدادات -->
+            <section class="settings-content">
+                <div class="page-header">
+                    <h1><i class="fas fa-cog"></i> إعدادات النظام</h1>
+                    <p>تعديل إعدادات النظام العامة وإدارة التكوينات.</p>
+                </div>
+
+                <!-- تبويبات الإعدادات -->
+                <div class="settings-tabs">
+                    <button class="tab-btn active" data-tab="general"><i class="fas fa-sliders-h"></i> عام</button>
+                    <button class="tab-btn" data-tab="lab"><i class="fas fa-flask"></i> إعدادات المختبر</button>
+                    <button class="tab-btn" data-tab="billing"><i class="fas fa-money-bill-wave"></i> الفواتير</button>
+                    <button class="tab-btn" data-tab="notifications"><i class="fas fa-bell"></i> الإشعارات</button>
+                    <button class="tab-btn" data-tab="security"><i class="fas fa-shield-alt"></i> الأمان</button>
+                    <button class="tab-btn" data-tab="backup"><i class="fas fa-database"></i> النسخ الاحتياطي</button>
+                    <button class="tab-btn" data-tab="api"><i class="fas fa-code"></i> API</button>
+                </div>
+
+                <!-- محتوى التبويبات -->
+                <div class="tab-content active" id="general-tab">
+                    <div class="settings-section">
+                        <h3><i class="fas fa-globe"></i> الإعدادات العامة</h3>
+                        
+                        <div class="settings-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="system-name"><i class="fas fa-signature"></i> اسم النظام</label>
+                                    <input type="text" id="system-name" value="نظام معلومات المختبر (LIS)">
+                                </div>
+                                <div class="form-group">
+                                    <label for="system-logo"><i class="fas fa-image"></i> شعار النظام</label>
+                                    <div class="logo-upload">
+                                        <div class="logo-preview">
+                                            <i class="fas fa-flask"></i>
+                                            <span>LIS</span>
+                                        </div>
+                                        <div class="upload-controls">
+                                            <button type="button" class="btn btn-secondary btn-sm">
+                                                <i class="fas fa-upload"></i> رفع صورة
+                                            </button>
+                                            <button type="button" class="btn btn-secondary btn-sm">
+                                                <i class="fas fa-times"></i> إزالة
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="language"><i class="fas fa-language"></i> لغة النظام</label>
+                                    <select id="language">
+                                        <option value="ar" selected>العربية</option>
+                                        <option value="en">English</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="timezone"><i class="fas fa-clock"></i> المنطقة الزمنية</label>
+                                    <select id="timezone">
+                                        <option value="Africa/Cairo" selected>Africa/Cairo (GMT+2)</option>
+                                        <option value="UTC">UTC</option>
+                                        <option value="America/New_York">America/New_York</option>
+                                        <option value="Europe/London">Europe/London</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="date-format"><i class="fas fa-calendar-alt"></i> تنسيق التاريخ</label>
+                                    <select id="date-format">
+                                        <option value="dd/mm/yyyy">٢٥/٠٤/٢٠٢٤</option>
+                                        <option value="mm/dd/yyyy">٠٤/٢٥/٢٠٢٤</option>
+                                        <option value="yyyy-mm-dd">٢٠٢٤-٠٤-٢٥</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="time-format"><i class="fas fa-clock"></i> تنسيق الوقت</label>
+                                    <select id="time-format">
+                                        <option value="12h">١٢ ساعة (٢:٣٠ م)</option>
+                                        <option value="24h">٢٤ ساعة (١٤:٣٠)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="footer-text"><i class="fas fa-text-height"></i> نص تذييل الصفحات</label>
+                                <textarea id="footer-text" rows="2">© ٢٠٢٤ نظام معلومات المختبر (LIS) - مشروع تخرج</textarea>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button class="btn btn-secondary" type="button">إعادة التعيين</button>
+                                <button class="btn btn-primary" type="submit">حفظ التغييرات</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="lab-tab">
+                    <div class="settings-section">
+                        <h3><i class="fas fa-flask"></i> إعدادات المختبر</h3>
+                        
+                        <div class="settings-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="lab-name"><i class="fas fa-hospital"></i> اسم المختبر</label>
+                                    <input type="text" id="lab-name" value="مختبر القاهرة المركزي">
+                                </div>
+                                <div class="form-group">
+                                    <label for="lab-code"><i class="fas fa-hashtag"></i> كود المختبر</label>
+                                    <input type="text" id="lab-code" value="LAB-001">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="lab-address"><i class="fas fa-map-marker-alt"></i> عنوان المختبر</label>
+                                <textarea id="lab-address" rows="2">القاهرة - مصر - شارع النيل</textarea>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="lab-phone"><i class="fas fa-phone"></i> هاتف المختبر</label>
+                                    <input type="tel" id="lab-phone" value="+20212345678">
+                                </div>
+                                <div class="form-group">
+                                    <label for="lab-email"><i class="fas fa-envelope"></i> بريد المختبر</label>
+                                    <input type="email" id="lab-email" value="info@cairolab.com">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-vial"></i> أقسام المختبر</label>
+                                <div class="lab-departments">
+                                    <div class="department-item">
+                                        <input type="checkbox" id="dept-hematology" checked>
+                                        <label for="dept-hematology">أمراض الدم</label>
+                                    </div>
+                                    <div class="department-item">
+                                        <input type="checkbox" id="dept-chemistry" checked>
+                                        <label for="dept-chemistry">الكيمياء الحيوية</label>
+                                    </div>
+                                    <div class="department-item">
+                                        <input type="checkbox" id="dept-microbiology" checked>
+                                        <label for="dept-microbiology">الأحياء الدقيقة</label>
+                                    </div>
+                                    <div class="department-item">
+                                        <input type="checkbox" id="dept-hormones" checked>
+                                        <label for="dept-hormones">الهرمونات</label>
+                                    </div>
+                                    <div class="department-item">
+                                        <input type="checkbox" id="dept-urine">
+                                        <label for="dept-urine">تحاليل البول</label>
+                                    </div>
+                                    <div class="department-item">
+                                        <input type="checkbox" id="dept-immunology">
+                                        <label for="dept-immunology">المناعة</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="result-validity"><i class="fas fa-calendar-check"></i> صلاحية النتائج (أيام)</label>
+                                <input type="number" id="result-validity" value="30" min="1" max="365">
+                                <small class="hint">عدد الأيام التي تظل فيها نتائج الفحوصات صالحة</small>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button class="btn btn-secondary" type="button">إعادة التعيين</button>
+                                <button class="btn btn-primary" type="submit">حفظ التغييرات</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="billing-tab">
+                    <div class="settings-section">
+                        <h3><i class="fas fa-money-bill-wave"></i> إعدادات الفواتير والمدفوعات</h3>
+                        
+                        <div class="settings-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="currency"><i class="fas fa-coins"></i> العملة</label>
+                                    <select id="currency">
+                                        <option value="EGP" selected>جنيه مصري (ج.م)</option>
+                                        <option value="USD">دولار أمريكي ($)</option>
+                                        <option value="EUR">يورو (€)</option>
+                                        <option value="SAR">ريال سعودي (ر.س)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tax-rate"><i class="fas fa-percentage"></i> نسبة الضريبة (%)</label>
+                                    <input type="number" id="tax-rate" value="14" step="0.1" min="0" max="100">
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="invoice-prefix"><i class="fas fa-file-invoice"></i> بادئة أرقام الفواتير</label>
+                                    <input type="text" id="invoice-prefix" value="INV-">
+                                </div>
+                                <div class="form-group">
+                                    <label for="invoice-start"><i class="fas fa-sort-numeric-up"></i> رقم الفاتورة التالي</label>
+                                    <input type="number" id="invoice-start" value="3301" min="1">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-credit-card"></i> طرق الدفع المتاحة</label>
+                                <div class="payment-methods">
+                                    <div class="method-item">
+                                        <input type="checkbox" id="method-cash" checked>
+                                        <label for="method-cash">نقداً</label>
+                                    </div>
+                                    <div class="method-item">
+                                        <input type="checkbox" id="method-visa" checked>
+                                        <label for="method-visa">بطاقة ائتمان/خصم</label>
+                                    </div>
+                                    <div class="method-item">
+                                        <input type="checkbox" id="method-bank">
+                                        <label for="method-bank">تحويل بنكي</label>
+                                    </div>
+                                    <div class="method-item">
+                                        <input type="checkbox" id="method-cheque">
+                                        <label for="method-cheque">شيك</label>
+                                    </div>
+                                    <div class="method-item">
+                                        <input type="checkbox" id="method-insurance">
+                                        <label for="method-insurance">تأمين</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="due-days"><i class="fas fa-calendar-day"></i> فترة الاستحقاق (أيام)</label>
+                                <input type="number" id="due-days" value="30" min="1" max="365">
+                                <small class="hint">عدد الأيام المسموح بها لسداد الفواتير</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="late-fee"><i class="fas fa-exclamation-triangle"></i> رسوم التأخير (%)</label>
+                                <input type="number" id="late-fee" value="5" step="0.1" min="0" max="100">
+                                <small class="hint">النسبة المئوية للإضافة على الفواتير المتأخرة</small>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button class="btn btn-secondary" type="button">إعادة التعيين</button>
+                                <button class="btn btn-primary" type="submit">حفظ التغييرات</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="security-tab">
+                    <div class="settings-section">
+                        <h3><i class="fas fa-shield-alt"></i> إعدادات الأمان</h3>
+                        
+                        <div class="settings-form">
+                            <div class="form-group">
+                                <label for="session-timeout"><i class="fas fa-hourglass-half"></i> مدة انتهاء الجلسة (دقائق)</label>
+                                <input type="number" id="session-timeout" value="30" min="5" max="480">
+                                <small class="hint">مدة عدم النشاط قبل تسجيل الخروج التلقائي</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="max-login-attempts"><i class="fas fa-user-lock"></i> الحد الأقصى لمحاولات الدخول</label>
+                                <input type="number" id="max-login-attempts" value="5" min="1" max="10">
+                                <small class="hint">عدد المحاولات الفاشلة قبل قفل الحساب مؤقتاً</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="password-expiry"><i class="fas fa-key"></i> صلاحية كلمة المرور (أيام)</label>
+                                <input type="number" id="password-expiry" value="90" min="1" max="365">
+                                <small class="hint">عدد الأيام قبل انتهاء صلاحية كلمة المرور</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="password-min-length"><i class="fas fa-ruler"></i> الحد الأدنى لطول كلمة المرور</label>
+                                <input type="number" id="password-min-length" value="8" min="6" max="32">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-user-shield"></i> متطلبات كلمة المرور</label>
+                                <div class="password-requirements">
+                                    <div class="requirement-item">
+                                        <input type="checkbox" id="req-uppercase" checked>
+                                        <label for="req-uppercase">حرف كبير على الأقل</label>
+                                    </div>
+                                    <div class="requirement-item">
+                                        <input type="checkbox" id="req-lowercase" checked>
+                                        <label for="req-lowercase">حرف صغير على الأقل</label>
+                                    </div>
+                                    <div class="requirement-item">
+                                        <input type="checkbox" id="req-number" checked>
+                                        <label for="req-number">رقم على الأقل</label>
+                                    </div>
+                                    <div class="requirement-item">
+                                        <input type="checkbox" id="req-special">
+                                        <label for="req-special">رمز خاص على الأقل (!@#$%)</label>
+                                    </div>
+                                    <div class="requirement-item">
+                                        <input type="checkbox" id="req-previous">
+                                        <label for="req-previous">عدم تكرار آخر ٣ كلمات مرور</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-lock"></i> إعدادات تسجيل الدخول</label>
+                                <div class="login-settings">
+                                    <div class="setting-item">
+                                        <input type="checkbox" id="two-factor-auth">
+                                        <label for="two-factor-auth">المصادقة الثنائية (2FA)</label>
+                                    </div>
+                                    <div class="setting-item">
+                                        <input type="checkbox" id="ip-restriction">
+                                        <label for="ip-restriction">تقييد عناوين IP المسموحة</label>
+                                    </div>
+                                    <div class="setting-item">
+                                        <input type="checkbox" id="force-logout" checked>
+                                        <label for="force-logout">إجبارية تسجيل الخروج من جميع الأجهزة</label>
+                                    </div>
+                                    <div class="setting-item">
+                                        <input type="checkbox" id="session-limit" checked>
+                                        <label for="session-limit">تحديد عدد الجلسات النشطة (٥ كحد أقصى)</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-history"></i> حفظ سجل الدخول</label>
+                                <select id="audit-retention">
+                                    <option value="30">٣٠ يوماً</option>
+                                    <option value="90" selected>٩٠ يوماً</option>
+                                    <option value="180">١٨٠ يوماً</option>
+                                    <option value="365">سنة واحدة</option>
+                                    <option value="forever">للأبد</option>
+                                </select>
+                                <small class="hint">المدة التي يتم فيها الاحتفاظ بسجل دخول المستخدمين</small>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button class="btn btn-secondary" type="button">إعادة التعيين</button>
+                                <button class="btn btn-primary" type="submit">حفظ التغييرات</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="backup-tab">
+                    <div class="settings-section">
+                        <h3><i class="fas fa-database"></i> النسخ الاحتياطي والاستعادة</h3>
+                        
+                        <div class="backup-info">
+                            <div class="info-card">
+                                <div class="info-icon">
+                                    <i class="fas fa-database"></i>
+                                </div>
+                                <div class="info-content">
+                                    <h4>حجم قاعدة البيانات</h4>
+                                    <p class="info-value">٢.٤ جيجابايت</p>
+                                </div>
+                            </div>
+                            <div class="info-card">
+                                <div class="info-icon">
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+                                <div class="info-content">
+                                    <h4>آخر نسخ احتياطي</h4>
+                                    <p class="info-value">٢٠٢٤-٠٤-٢٤ ٠٢:٠٠ ص</p>
+                                </div>
+                            </div>
+                            <div class="info-card">
+                                <div class="info-icon">
+                                    <i class="fas fa-history"></i>
+                                </div>
+                                <div class="info-content">
+                                    <h4>عدد النسخ المحفوظة</h4>
+                                    <p class="info-value">١٥ نسخة</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-form">
+                            <div class="form-group">
+                                <label for="backup-frequency"><i class="fas fa-sync-alt"></i> تردد النسخ الاحتياطي</label>
+                                <select id="backup-frequency">
+                                    <option value="daily">يومياً</option>
+                                    <option value="weekly" selected>أسبوعياً</option>
+                                    <option value="monthly">شهرياً</option>
+                                    <option value="manual">يدوي فقط</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="backup-time"><i class="fas fa-clock"></i> وقت النسخ الاحتياطي</label>
+                                <input type="time" id="backup-time" value="02:00">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="retention-days"><i class="fas fa-calendar-times"></i> مدة الاحتفاظ بالنسخ (أيام)</label>
+                                <input type="number" id="retention-days" value="30" min="1" max="365">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-cloud-upload-alt"></i> مواقع النسخ الاحتياطي</label>
+                                <div class="backup-locations">
+                                    <div class="location-item">
+                                        <input type="checkbox" id="loc-local" checked>
+                                        <label for="loc-local">السيرفر المحلي</label>
+                                    </div>
+                                    <div class="location-item">
+                                        <input type="checkbox" id="loc-google">
+                                        <label for="loc-google">Google Drive</label>
+                                    </div>
+                                    <div class="location-item">
+                                        <input type="checkbox" id="loc-dropbox">
+                                        <label for="loc-dropbox">Dropbox</label>
+                                    </div>
+                                    <div class="location-item">
+                                        <input type="checkbox" id="loc-ftp">
+                                        <label for="loc-ftp">خادم FTP خارجي</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button class="btn btn-secondary" id="backup-now">
+                                    <i class="fas fa-save"></i> نسخ احتياطي الآن
+                                </button>
+                                <button class="btn btn-secondary" id="restore-backup">
+                                    <i class="fas fa-undo"></i> استعادة نسخة
+                                </button>
+                                <button class="btn btn-danger" id="delete-old">
+                                    <i class="fas fa-trash"></i> حذف النسخ القديمة
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="backup-history">
+                            <h4><i class="fas fa-history"></i> سجل النسخ الاحتياطية</h4>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>التاريخ</th>
+                                        <th>النوع</th>
+                                        <th>الحجم</th>
+                                        <th>الحالة</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>٢٠٢٤-٠٤-٢٤ ٠٢:٠٠</td>
+                                        <td>تلقائي</td>
+                                        <td>٢.٣ جيجابايت</td>
+                                        <td><span class="status success">نجح</span></td>
+                                        <td>
+                                            <button class="btn-icon btn-download" title="تحميل">
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                            <button class="btn-icon btn-restore" title="استعادة">
+                                                <i class="fas fa-undo"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>٢٠٢٤-٠٤-١٧ ٠٢:٠٠</td>
+                                        <td>تلقائي</td>
+                                        <td>٢.٢ جيجابايت</td>
+                                        <td><span class="status success">نجح</span></td>
+                                        <td>
+                                            <button class="btn-icon btn-download">
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                            <button class="btn-icon btn-restore">
+                                                <i class="fas fa-undo"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>٢٠٢٤-٠٤-١٠ ٠٢:٠٠</td>
+                                        <td>تلقائي</td>
+                                        <td>٢.١ جيجابايت</td>
+                                        <td><span class="status success">نجح</span></td>
+                                        <td>
+                                            <button class="btn-icon btn-download">
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                            <button class="btn-icon btn-restore">
+                                                <i class="fas fa-undo"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- الإعدادات المتقدمة -->
+                <div class="advanced-settings">
+                    <h3><i class="fas fa-cogs"></i> الإعدادات المتقدمة</h3>
+                    <div class="warning-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>
+                            <h4>تحذير: الإعدادات المتقدمة</h4>
+                            <p>التغيير في هذه الإعدادات قد يؤثر على أداء النظام واستقراره. يرجى التأكد من معرفتك بما تفعله قبل إجراء أي تغييرات.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="advanced-options">
+                        <div class="option-item">
+                            <h5><i class="fas fa-bug"></i> وضع التصحيح (Debug Mode)</h5>
+                            <p>تفعيل وضع التصحيح لعرض رسائل الأخطاء بالتفصيل.</p>
+                            <label class="switch">
+                                <input type="checkbox" id="debug-mode">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="option-item">
+                            <h5><i class="fas fa-tachometer-alt"></i> وضع الأداء العالي</h5>
+                            <p>تحسين الأداء على حساب استهلاك موارد أكبر.</p>
+                            <label class="switch">
+                                <input type="checkbox" id="performance-mode">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="option-item">
+                            <h5><i class="fas fa-trash-alt"></i> مسح بيانات الاختبار</h5>
+                            <p>حذف جميع بيانات الاختبار والعينات الوهمية.</p>
+                            <button class="btn btn-danger btn-sm">مسح البيانات</button>
+                        </div>
+                        
+                        <div class="option-item">
+                            <h5><i class="fas fa-redo"></i> إعادة تعيين النظام</h5>
+                            <p>إعادة جميع الإعدادات إلى قيمها الافتراضية.</p>
+                            <button class="btn btn-warning btn-sm">إعادة التعيين</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="footer">
+                <p>© ٢٠٢٤ نظام معلومات المختبر (LIS) - مشروع تخرج - جميع الحقوق محفوظة</p>
+                <p>الإصدار ٢.١.٠ | آخر تحديث: ٢٥ أبريل ٢٠٢٤</p>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        // عرض التاريخ الحالي
+        const now = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-date').textContent = now.toLocaleDateString('ar-EG', options);
+
+        // تفعيل تبويبات الإعدادات
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // تحديث الأزرار النشطة
+                tabBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // تحديث المحتوى النشط
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === `${tabId}-tab`) {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // حفظ الإعدادات
+        const settingsForms = document.querySelectorAll('.settings-form');
+        settingsForms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // جمع بيانات النموذج
+                const formData = new FormData(this);
+                const data = {};
+                formData.forEach((value, key) => {
+                    data[key] = value;
+                });
+                
+                // محاكاة حفظ الإعدادات
+                console.log('حفظ الإعدادات:', data);
+                
+                // عرض رسالة نجاح
+                alert('تم حفظ الإعدادات بنجاح!');
+                
+                // في بيئة حقيقية، هنا يتم إرسال البيانات إلى الخادم
+            });
+        });
+
+        // النسخ الاحتياطي الآن
+        document.getElementById('backup-now').addEventListener('click', function() {
+            if (confirm('هل تريد إنشاء نسخة احتياطية الآن؟ قد يستغرق هذا بضع دقائق.')) {
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري النسخ...';
+                this.disabled = true;
+                
+                // محاكاة عملية النسخ الاحتياطي
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fas fa-save"></i> نسخ احتياطي الآن';
+                    this.disabled = false;
+                    alert('تم إنشاء النسخ الاحتياطي بنجاح!');
+                }, 3000);
+            }
+        });
+
+        // استعادة نسخة
+        document.getElementById('restore-backup').addEventListener('click', function() {
+            if (confirm('تحذير: استعادة نسخة قديمة سيؤدي إلى فقدان البيانات الحالية. هل تريد المتابعة؟')) {
+                alert('يجب اختيار نسخة من سجل النسخ الاحتياطية للاستعادة.');
+            }
+        });
+
+        // حذف النسخ القديمة
+        document.getElementById('delete-old').addEventListener('click', function() {
+            if (confirm('هل تريد حذف جميع النسخ الاحتياطية الأقدم من ٣٠ يوماً؟')) {
+                if (confirm('هذا الإجراء لا يمكن التراجع عنه. هل أنت متأكد؟')) {
+                    alert('تم حذف النسخ القديمة بنجاح.');
+                }
+            }
+        });
+
+        // أزرار الاستعادة والتحميل في الجدول
+        const downloadBtns = document.querySelectorAll('.btn-download');
+        const restoreBtns = document.querySelectorAll('.btn-restore');
+        
+        downloadBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                alert('سيبدأ تحميل النسخة الاحتياطية...');
+            });
+        });
+        
+        restoreBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (confirm('هل تريد استعادة هذه النسخة؟ سيتم استبدال جميع البيانات الحالية.')) {
+                    if (confirm('هذا الإجراء لا يمكن التراجع عنه. تأكد من حفظ بياناتك الحالية.')) {
+                        alert('جاري استعادة النسخة... قد يستغرق هذا بضع دقائق.');
+                    }
+                }
+            });
+        });
+
+        // الإعدادات المتقدمة
+        document.getElementById('debug-mode').addEventListener('change', function() {
+            if (this.checked) {
+                alert('تم تفعيل وضع التصحيح. سيتم عرض رسائل الأخطاء بالتفصيل.');
+            } else {
+                alert('تم تعطيل وضع التصحيح.');
+            }
+        });
+
+        document.getElementById('performance-mode').addEventListener('change', function() {
+            if (this.checked) {
+                alert('تم تفعيل وضع الأداء العالي.');
+            } else {
+                alert('تم تعطيل وضع الأداء العالي.');
+            }
+        });
+    </script>
+</body>
+</html>

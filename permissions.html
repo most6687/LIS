@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الصلاحيات - نظام معلومات المختبر</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="permissions.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- الشريط الجانبي -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-flask"></i>
+                <h2>نظام المختبر LIS</h2>
+            </div>
+            <ul class="menu">
+                <li><a href="index.html"><i class="fas fa-tachometer-alt"></i> لوحة التحكم</a></li>
+                <li><a href="users.html"><i class="fas fa-users"></i> إدارة المستخدمين</a></li>
+                <li class="active"><a href="permissions.html"><i class="fas fa-user-shield"></i> إدارة الصلاحيات</a></li>
+                <li><a href="statistics.html"><i class="fas fa-chart-bar"></i> الإحصائيات</a></li>
+                <li><a href="audit.html"><i class="fas fa-history"></i> Audit Trail</a></li>
+                <li><a href="patients.html"><i class="fas fa-user-injured"></i> المرضى</a></li>
+                <li><a href="inventory.html"><i class="fas fa-boxes"></i> المخزون</a></li>
+                <li><a href="reports.html"><i class="fas fa-file-pdf"></i> التقارير</a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> الإعدادات</a></li>
+            </ul>
+            <div class="user-info">
+                <img src="https://ui-avatars.com/api/?name=مسؤول+النظام&background=0D8ABC&color=fff" alt="صورة المستخدم">
+                <div>
+                    <h4>مسؤول النظام</h4>
+                    <p>Admin</p>
+                </div>
+                <a href="logout.html" class="logout"><i class="fas fa-sign-out-alt"></i></a>
+            </div>
+        </aside>
+
+        <!-- المحتوى الرئيسي -->
+        <main class="main-content">
+            <!-- الشريط العلوي -->
+            <header class="topbar">
+                <div class="search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="ابحث عن صلاحية...">
+                </div>
+                <div class="topbar-right">
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">2</span>
+                    </div>
+                    <div class="date-display">
+                        <i class="far fa-calendar-alt"></i>
+                        <span id="current-date">--/--/----</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- محتوى إدارة الصلاحيات -->
+            <section class="permissions-management">
+                <div class="page-header">
+                    <h1><i class="fas fa-user-shield"></i> إدارة الصلاحيات</h1>
+                    <p>إدارة وتعديل صلاحيات الأدوار المختلفة في النظام. يمكنك نسخ صلاحيات من دور إلى آخر.</p>
+                </div>
+
+                <!-- اختيار الدور -->
+                <div class="role-selector">
+                    <div class="role-header">
+                        <h3><i class="fas fa-user-tag"></i> اختر دوراً لإدارة صلاحياته:</h3>
+                        <button class="btn btn-primary" id="save-permissions">
+                            <i class="fas fa-save"></i> حفظ التغييرات
+                        </button>
+                    </div>
+                    <div class="roles-tabs">
+                        <button class="role-tab active" data-role="admin">مسؤول النظام</button>
+                        <button class="role-tab" data-role="receptionist">موظف الاستقبال</button>
+                        <button class="role-tab" data-role="lab_tech">فني المختبر</button>
+                        <button class="role-tab" data-role="doctor">طبيب</button>
+                        <button class="role-tab" data-role="billing">موظف الفواتير</button>
+                        <button class="role-tab" data-role="inventory">مدير المخزون</button>
+                        <button class="role-tab" data-role="lab_supervisor">مشرف المختبر</button>
+                    </div>
+                </div>
+
+                <!-- معلومات الدور المحدد -->
+                <div class="role-info">
+                    <div class="role-card">
+                        <div class="role-icon">
+                            <i class="fas fa-user-cog"></i>
+                        </div>
+                        <div class="role-details">
+                            <h3 id="current-role-name">مسؤول النظام</h3>
+                            <p id="current-role-desc">يتمتع بجميع الصلاحيات في النظام، يمكنه إدارة كل شيء.</p>
+                            <div class="role-stats">
+                                <span><i class="fas fa-users"></i> <strong id="role-users-count">٥</strong> مستخدم</span>
+                                <span><i class="fas fa-check-circle"></i> <strong id="role-perms-count">٣٢</strong> صلاحية</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" id="copy-permissions-btn">
+                            <i class="fas fa-copy"></i> نسخ الصلاحيات
+                        </button>
+                    </div>
+                </div>
+
+                <!-- جدول الصلاحيات -->
+                <div class="permissions-grid">
+                    <!-- قسم إدارة المرضى -->
+                    <div class="permission-category">
+                        <div class="category-header">
+                            <h4><i class="fas fa-user-injured"></i> إدارة المرضى</h4>
+                            <label class="select-all-category">
+                                <input type="checkbox" class="category-checkbox" data-category="patient">
+                                تحديد الكل
+                            </label>
+                        </div>
+                        <div class="permissions-list">
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="patient" checked>
+                                    <span class="permission-name">إضافة مريض جديد</span>
+                                    <span class="permission-desc">القدرة على تسجيل بيانات مريض جديد</span>
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="patient" checked>
+                                    <span class="permission-name">تعديل بيانات المريض</span>
+                                    <span class="permission-desc">تعديل المعلومات الشخصية والتاريخ الطبي</span>
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="patient">
+                                    <span class="permission-name">حذف المريض</span>
+                                    <span class="permission-desc">إزالة المريض من النظام نهائياً</span>
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="patient" checked>
+                                    <span class="permission-name">عرض سجل المريض</span>
+                                    <span class="permission-desc">عرض التاريخ المرضي والفحوصات السابقة</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- قسم الفحوصات -->
+                    <div class="permission-category">
+                        <div class="category-header">
+                            <h4><i class="fas fa-vial"></i> إدارة الفحوصات</h4>
+                            <label class="select-all-category">
+                                <input type="checkbox" class="category-checkbox" data-category="tests">
+                                تحديد الكل
+                            </label>
+                        </div>
+                        <div class="permissions-list">
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="tests" checked>
+                                    <span class="permission-name">طلب فحص جديد</span>
+                                    <span class="permission-desc">إنشاء طلب فحص للمريض</span>
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="tests">
+                                    <span class="permission-name">تعديل طلب الفحص</span>
+                                    <span class="permission-desc">تعديل بيانات طلب الفحص قبل التنفيذ</span>
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="tests" checked>
+                                    <span class="permission-name">إدخال نتائج الفحص</span>
+                                    <span class="permission-desc">إدخال القيم المخبرية للفحص</span>
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="tests">
+                                    <span class="permission-name">تعديل نتائج الفحص</span>
+                                    <span class="permission-desc">تعديل النتائج بعد إدخالها</span>
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="tests" checked>
+                                    <span class="permission-name">التحقق من النتائج</span>
+                                    <span class="permission-desc">مراجعة والتحقق من صحة النتائج</span>
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="tests">
+                                    <span class="permission-name">إلغاء الفحص</span>
+                                    <span class="permission-desc">إلغاء طلب فحص بشكل نهائي</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- قسم العينات -->
+                    <div class="permission-category">
+                        <div class="category-header">
+                            <h4><i class="fas fa-vial-virus"></i> إدارة العينات</h4>
+                            <label class="select-all-category">
+                                <input type="checkbox" class="category-checkbox" data-category="samples">
+                                تحديد الكل
+                            </label>
+                        </div>
+                        <div class="permissions-list">
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="samples" checked>
+                                    <span class="permission-name">تسجيل استلام عينة</span>
+                                    <span class="permission-desc">تسجيل استلام العينة من المريض</span>
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="samples">
+                                    <span class="permission-name">تحديث حالة العينة</span>
+                                    <span class="permission-desc">تغيير حالة العينة (مستلمة، قيد التحليل، مكتملة)</span>
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="samples">
+                                    <span class="permission-name">الإبلاغ عن عينة تالفة</span>
+                                    <span class="permission-desc">تسجيل حالة العينات التالفة أو المفقودة</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- قسم المخزون -->
+                    <div class="permission-category">
+                        <div class="category-header">
+                            <h4><i class="fas fa-boxes"></i> إدارة المخزون</h4>
+                            <label class="select-all-category">
+                                <input type="checkbox" class="category-checkbox" data-category="inventory">
+                                تحديد الكل
+                            </label>
+                        </div>
+                        <div class="permissions-list">
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="inventory">
+                                    <span class="permission-name">عرض المخزون</span>
+                                    <span class="permission-desc">عرض كميات المواد والأدوات المتاحة</span>
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="inventory">
+                                    <span class="permission-name">إضافة مواد جديدة</span>
+                                    <span class="permission-desc">إضافة أصناف جديدة إلى المخزون</span>
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="inventory">
+                                    <span class="permission-name">تحديث المخزون</span>
+                                    <span class="permission-desc">تعديل كميات المخزون بعد الاستخدام</span>
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="inventory">
+                                    <span class="permission-name">تسجيل طلب شراء</span>
+                                    <span class="permission-desc">إنشاء طلب شراء مواد جديدة</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- قسم الفواتير -->
+                    <div class="permission-category">
+                        <div class="category-header">
+                            <h4><i class="fas fa-file-invoice-dollar"></i> إدارة الفواتير</h4>
+                            <label class="select-all-category">
+                                <input type="checkbox" class="category-checkbox" data-category="billing">
+                                تحديد الكل
+                            </label>
+                        </div>
+                        <div class="permissions-list">
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="billing" checked>
+                                    <span class="permission-name">إنشاء فاتورة</span>
+                                    <span class="permission-desc">إنشاء فاتورة جديدة للمريض</span>
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="billing">
+                                    <span class="permission-name">تعديل الفاتورة</span>
+                                    <span class="permission-desc">تعديل بنود أو أسعار الفاتورة</span>
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="billing" checked>
+                                    <span class="permission-name">تسجيل الدفع</span>
+                                    <span class="permission-desc">تسجيل مدفوعات المريض</span>
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="billing">
+                                    <span class="permission-name">عرض تقارير المبيعات</span>
+                                    <span class="permission-desc">عرض إحصائيات وإيرادات المختبر</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- قسم التقارير -->
+                    <div class="permission-category">
+                        <div class="category-header">
+                            <h4><i class="fas fa-chart-bar"></i> التقارير والإحصائيات</h4>
+                            <label class="select-all-category">
+                                <input type="checkbox" class="category-checkbox" data-category="reports">
+                                تحديد الكل
+                            </label>
+                        </div>
+                        <div class="permissions-list">
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="reports" checked>
+                                    <span class="permission-name">إنشاء تقرير PDF</span>
+                                    <span class="permission-desc">تصدير النتائج والتقارير بصيغة PDF</span>
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="reports">
+                                    <span class="permission-name">عرض الإحصائيات</span>
+                                    <span class="permission-desc">عرض الرسوم البيانية والإحصائيات</span>
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="reports">
+                                    <span class="permission-name">تصدير البيانات</span>
+                                    <span class="permission-desc">تصدير البيانات بصيغة Excel أو CSV</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- قسم الإدارة -->
+                    <div class="permission-category">
+                        <div class="category-header">
+                            <h4><i class="fas fa-cogs"></i> إدارة النظام</h4>
+                            <label class="select-all-category">
+                                <input type="checkbox" class="category-checkbox" data-category="administration">
+                                تحديد الكل
+                            </label>
+                        </div>
+                        <div class="permissions-list">
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="administration" checked>
+                                    <span class="permission-name">إدارة المستخدمين</span>
+                                    <span class="permission-desc">إضافة، تعديل، حذف مستخدمي النظام</span>
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="administration" checked>
+                                    <span class="permission-name">إدارة الصلاحيات</span>
+                                    <span class="permission-desc">تعديل صلاحيات الأدوار المختلفة</span>
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="administration" checked>
+                                    <span class="permission-name">عرض Audit Trail</span>
+                                    <span class="permission-desc">مراجعة سجل جميع الأنشطة في النظام</span>
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label>
+                                    <input type="checkbox" class="permission-checkbox" data-category="administration" checked>
+                                    <span class="permission-name">إعدادات النظام</span>
+                                    <span class="permission-desc">تعديل الإعدادات العامة للنظام</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ملخص الصلاحيات -->
+                <div class="permissions-summary">
+                    <h4><i class="fas fa-clipboard-check"></i> ملخص الصلاحيات</h4>
+                    <div class="summary-stats">
+                        <div class="stat">
+                            <span class="stat-number" id="total-permissions">٣٢</span>
+                            <span class="stat-label">إجمالي الصلاحيات</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number" id="granted-permissions">٢٨</span>
+                            <span class="stat-label">صلاحية ممنوحة</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number" id="denied-permissions">٤</span>
+                            <span class="stat-label">صلاحية مرفوضة</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-percentage" id="granted-percentage">٨٧.٥٪</span>
+                            <span class="stat-label">نسبة المنح</span>
+                        </div>
+                    </div>
+                    <div class="summary-actions">
+                        <button class="btn btn-secondary" id="reset-changes">
+                            <i class="fas fa-undo"></i> التراجع عن التغييرات
+                        </button>
+                        <button class="btn btn-primary" id="apply-all-changes">
+                            <i class="fas fa-check-circle"></i> تطبيق جميع التغييرات
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="footer">
+                <p>© ٢٠٢٤ نظام معلومات المختبر (LIS) - مشروع تخرج - جميع الحقوق محفوظة</p>
+                <p>الإصدار ٢.١.٠ | آخر تحديث: ٢٥ أبريل ٢٠٢٤</p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- نافذة نسخ الصلاحيات -->
+    <div class="modal-overlay" id="copy-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-copy"></i> نسخ الصلاحيات من دور</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>اختر دوراً لنسخ صلاحياته إلى الدور الحالي (<strong id="current-role-copy">مسؤول النظام</strong>):</p>
+                <div class="copy-options">
+                    <select id="source-role">
+                        <option value="">اختر الدور المصدر</option>
+                        <option value="admin">مسؤول النظام</option>
+                        <option value="receptionist">موظف الاستقبال</option>
+                        <option value="lab_tech">فني المختبر</option>
+                        <option value="doctor">طبيب</option>
+                        <option value="billing">موظف الفواتير</option>
+                        <option value="inventory">مدير المخزون</option>
+                        <option value="lab_supervisor">مشرف المختبر</option>
+                    </select>
+                </div>
+                <div class="warning-message">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>سيتم استبدال جميع صلاحيات الدور الحالي بصلاحيات الدور المختار.</p>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary close-modal">إلغاء</button>
+                    <button type="button" class="btn btn-primary" id="confirm-copy">نسخ الصلاحيات</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // عرض التاريخ الحالي
+        const now = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-date').textContent = now.toLocaleDateString('ar-EG', options);
+
+        // بيانات الأدوار
+        const rolesData = {
+            admin: {
+                name: "مسؤول النظام",
+                desc: "يتمتع بجميع الصلاحيات في النظام، يمكنه إدارة كل شيء.",
+                users: 5,
+                permissions: {
+                    patient: [true, true, true, true],
+                    tests: [true, true, true, true, true, true],
+                    samples: [true, true, true],
+                    inventory: [true, true, true, true],
+                    billing: [true, true, true, true],
+                    reports: [true, true, true],
+                    administration: [true, true, true, true]
+                }
+            },
+            receptionist: {
+                name: "موظف الاستقبال",
+                desc: "يدير تسجيل المرضى وطلبات الفحوصات الأساسية.",
+                users: 8,
+                permissions: {
+                    patient: [true, true, false, true],
+                    tests: [true, false, false, false, false, false],
+                    samples: [true, false, false],
+                    inventory: [false, false, false, false],
+                    billing: [true, false, false, false],
+                    reports: [false, false, false],
+                    administration: [false, false, false, false]
+                }
+            },
+            lab_tech: {
+                name: "فني المختبر",
+                desc: "مسؤول عن إدخال النتائج وتتبع العينات.",
+                users: 12,
+                permissions: {
+                    patient: [false, false, false, true],
+                    tests: [false, false, true, false, true, false],
+                    samples: [true, true, true],
+                    inventory: [true, false, true, false],
+                    billing: [false, false, false, false],
+                    reports: [true, false, false],
+                    administration: [false, false, false, false]
+                }
+            },
+            doctor: {
+                name: "طبيب",
+                desc: "يطلب الفحوصات ويطلع على النتائج والتاريخ المرضي.",
+                users: 15,
+                permissions: {
+                    patient: [true, true, false, true],
+                    tests: [true, true, false, false, false, true],
+                    samples: [false, false, false],
+                    inventory: [false, false, false, false],
+                    billing: [false, false, false, false],
+                    reports: [true, true, false],
+                    administration: [false, false, false, false]
+                }
+            },
+            billing: {
+                name: "موظف الفواتير",
+                desc: "يدير الفواتير والمدفوعات والمستحقات المالية.",
+                users: 4,
+                permissions: {
+                    patient: [false, false, false, true],
+                    tests: [false, false, false, false, false, false],
+                    samples: [false, false, false],
+                    inventory: [false, false, false, false],
+                    billing: [true, true, true, true],
+                    reports: [true, false, true],
+                    administration: [false, false, false, false]
+                }
+            },
+            inventory: {
+                name: "مدير المخزون",
+                desc: "يدير المخزون والمواد والطلبات الشرائية.",
+                users: 3,
+                permissions: {
+                    patient: [false, false, false, false],
+                    tests: [false, false, false, false, false, false],
+                    samples: [false, false, false],
+                    inventory: [true, true, true, true],
+                    billing: [false, false, false, false],
+                    reports: [true, false, false],
+                    administration: [false, false, false, false]
+                }
+            },
+            lab_supervisor: {
+                name: "مشرف المختبر",
+                desc: "يشرف على العمل في المختبر ويراجع النتائج.",
+                users: 2,
+                permissions: {
+                    patient: [false, false, false, true],
+                    tests: [false, false, true, true, true, true],
+                    samples: [true, true, true],
+                    inventory: [true, false, false, true],
+                    billing: [false, false, false, false],
+                    reports: [true, true, true],
+                    administration: [false, false, true, false]
+                }
+            }
+        };
+
+        // متغيرات
+        let currentRole = 'admin';
+        let changedPermissions = {};
+
+        // تغيير الدور
+        const roleTabs = document.querySelectorAll('.role-tab');
+        roleTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const role = this.getAttribute('data-role');
+                switchRole(role);
+                
+                // تحديث التبويبات النشطة
+                roleTabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        function switchRole(role) {
+            currentRole = role;
+            const roleData = rolesData[role];
+            
+            // تحديث معلومات الدور
+            document.getElementById('current-role-name').textContent = roleData.name;
+            document.getElementById('current-role-desc').textContent = roleData.desc;
+            document.getElementById('role-users-count').textContent = roleData.users;
+            document.getElementById('current-role-copy').textContent = roleData.name;
+            
+            // تحديث الصلاحيات
+            const categories = ['patient', 'tests', 'samples', 'inventory', 'billing', 'reports', 'administration'];
+            categories.forEach(category => {
+                const checkboxes = document.querySelectorAll(`.permission-checkbox[data-category="${category}"]`);
+                const categoryPermissions = roleData.permissions[category];
+                
+                checkboxes.forEach((checkbox, index) => {
+                    checkbox.checked = categoryPermissions[index];
+                });
+                
+                // تحديث تحديد الكل لكل قسم
+                const categoryCheckbox = document.querySelector(`.category-checkbox[data-category="${category}"]`);
+                const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                categoryCheckbox.checked = allChecked;
+            });
+            
+            // تحديث الإحصائيات
+            updatePermissionsSummary();
+        }
+
+        // تحديث ملخص الصلاحيات
+        function updatePermissionsSummary() {
+            const allCheckboxes = document.querySelectorAll('.permission-checkbox:checked');
+            const totalCheckboxes = document.querySelectorAll('.permission-checkbox');
+            
+            const granted = allCheckboxes.length;
+            const total = totalCheckboxes.length;
+            const denied = total - granted;
+            const percentage = ((granted / total) * 100).toFixed(1);
+            
+            document.getElementById('total-permissions').textContent = total;
+            document.getElementById('granted-permissions').textContent = granted;
+            document.getElementById('denied-permissions').textContent = denied;
+            document.getElementById('granted-percentage').textContent = `${percentage}%`;
+            document.getElementById('role-perms-count').textContent = granted;
+        }
+
+        // تحديد/إلغاء تحديد كل الصلاحيات في قسم
+        const categoryCheckboxes = document.querySelectorAll('.category-checkbox');
+        categoryCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const category = this.getAttribute('data-category');
+                const categoryCheckboxes = document.querySelectorAll(`.permission-checkbox[data-category="${category}"]`);
+                
+                categoryCheckboxes.forEach(cb => {
+                    cb.checked = this.checked;
+                });
+                
+                updatePermissionsSummary();
+            });
+        });
+
+        // تحديث ملخص عند تغيير أي صلاحية
+        const permissionCheckboxes = document.querySelectorAll('.permission-checkbox');
+        permissionCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const category = this.getAttribute('data-category');
+                const categoryCheckboxes = document.querySelectorAll(`.permission-checkbox[data-category="${category}"]`);
+                const categoryCheckbox = document.querySelector(`.category-checkbox[data-category="${category}"]`);
+                
+                // تحديث زر "تحديد الكل" للقسم
+                const allChecked = Array.from(categoryCheckboxes).every(cb => cb.checked);
+                categoryCheckbox.checked = allChecked;
+                
+                updatePermissionsSummary();
+            });
+        });
+
+        // حفظ الصلاحيات
+        document.getElementById('save-permissions').addEventListener('click', function() {
+            const allCheckboxes = document.querySelectorAll('.permission-checkbox');
+            const permissions = {};
+            
+            // تجميع الصلاحيات المتغيرة
+            allCheckboxes.forEach((checkbox, index) => {
+                const category = checkbox.getAttribute('data-category');
+                if (!permissions[category]) permissions[category] = [];
+                permissions[category].push(checkbox.checked);
+            });
+            
+            // هنا يمكنك إرسال البيانات إلى الخادم
+            console.log('حفظ صلاحيات الدور:', currentRole, permissions);
+            
+            // عرض رسالة نجاح
+            alert('تم حفظ صلاحيات الدور بنجاح!');
+            
+            // تحديث البيانات المحلية
+            rolesData[currentRole].permissions = permissions;
+        });
+
+        // نسخ الصلاحيات
+        const copyBtn = document.getElementById('copy-permissions-btn');
+        const copyModal = document.getElementById('copy-modal');
+        const closeModalBtns = document.querySelectorAll('.close-modal');
+        
+        copyBtn.addEventListener('click', () => {
+            copyModal.style.display = 'flex';
+        });
+        
+        closeModalBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                copyModal.style.display = 'none';
+            });
+        });
+        
+        copyModal.addEventListener('click', (e) => {
+            if (e.target === copyModal) {
+                copyModal.style.display = 'none';
+            }
+        });
+        
+        document.getElementById('confirm-copy').addEventListener('click', function() {
+            const sourceRole = document.getElementById('source-role').value;
+            if (!sourceRole) {
+                alert('يرجى اختيار دور لنسخ صلاحياته');
+                return;
+            }
+            
+            if (confirm(`هل أنت متأكد من نسخ صلاحيات ${rolesData[sourceRole].name} إلى ${rolesData[currentRole].name}؟`)) {
+                rolesData[currentRole].permissions = JSON.parse(JSON.stringify(rolesData[sourceRole].permissions));
+                switchRole(currentRole);
+                copyModal.style.display = 'none';
+                alert('تم نسخ الصلاحيات بنجاح!');
+            }
+        });
+
+        // التراجع عن التغييرات
+        document.getElementById('reset-changes').addEventListener('click', function() {
+            if (confirm('هل تريد التراجع عن جميع التغييرات غير المحفوظة؟')) {
+                switchRole(currentRole);
+            }
+        });
+
+        // تطبيق جميع التغييرات
+        document.getElementById('apply-all-changes').addEventListener('click', function() {
+            if (confirm('هل تريد تطبيق جميع التغييرات على جميع الأدوار؟ سيتم فقدان التغييرات غير المحفوظة.')) {
+                alert('تم تطبيق التغييرات على جميع الأدوار بنجاح!');
+                // هنا يمكنك إضافة منطق تطبيق التغييرات على جميع الأدوار
+            }
+        });
+
+        // تحديث الملخص عند التحميل
+        updatePermissionsSummary();
+    </script>
+</body>
+</html>

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - نظام معلومات المختبر</title>
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="login-container">
+        <!-- الشريط الجانبي -->
+        <div class="login-sidebar">
+            <div class="sidebar-content">
+                <div class="logo">
+                    <i class="fas fa-flask"></i>
+                    <h1>نظام معلومات المختبر</h1>
+                    <p>Laboratory Information System (LIS)</p>
+                </div>
+                
+                <div class="features">
+                    <h3><i class="fas fa-star"></i> مميزات النظام</h3>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> إدارة كاملة للمرضى والفحوصات</li>
+                        <li><i class="fas fa-check-circle"></i> تتبع العينات والنتائج</li>
+                        <li><i class="fas fa-check-circle"></i> إدارة المخزون والتوريدات</li>
+                        <li><i class="fas fa-check-circle"></i> الفواتير والحسابات</li>
+                        <li><i class="fas fa-check-circle"></i> تقارير وإحصائيات متقدمة</li>
+                        <li><i class="fas fa-check-circle"></i> أمان عالي وتشفير البيانات</li>
+                    </ul>
+                </div>
+                
+                <div class="testimonials">
+                    <div class="testimonial">
+                        <p>"النظام سهل الاستخدام وساعدنا في زيادة الكفاءة بنسبة 40%"</p>
+                        <span>- د. أحمد محمد، مدير المختبر</span>
+                    </div>
+                </div>
+                
+                <div class="system-info">
+                    <p><i class="fas fa-shield-alt"></i> نظام آمن ومشفر</p>
+                    <p><i class="fas fa-cloud"></i> نسخة ٢.١.٠ | آخر تحديث: أبريل ٢٠٢٤</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- منطقة تسجيل الدخول -->
+        <div class="login-form-area">
+            <div class="form-container">
+                <!-- ترويسة النموذج -->
+                <div class="form-header">
+                    <h2><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</h2>
+                    <p>أدخل بيانات الدخول للوصول إلى نظام المختبر</p>
+                </div>
+                
+                <!-- رسائل التنبيه -->
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <p>يجب أن يكون لديك حساب صالح للدخول إلى النظام.</p>
+                </div>
+                
+                <!-- رسالة خطأ (مخفي افتراضياً) -->
+                <div class="alert alert-error" id="error-message" style="display: none;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p id="error-text">اسم المستخدم أو كلمة المرور غير صحيحة.</p>
+                </div>
+                
+                <!-- النموذج -->
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="username"><i class="fas fa-user"></i> اسم المستخدم أو البريد الإلكتروني</label>
+                        <div class="input-with-icon">
+                            <input type="text" id="username" placeholder="أدخل اسم المستخدم أو البريد الإلكتروني" required>
+                            <i class="fas fa-user input-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password"><i class="fas fa-lock"></i> كلمة المرور</label>
+                        <div class="input-with-icon">
+                            <input type="password" id="password" placeholder="أدخل كلمة المرور" required>
+                            <i class="fas fa-lock input-icon"></i>
+                            <button type="button" class="toggle-password" id="toggle-password">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="password-options">
+                            <label class="remember-me">
+                                <input type="checkbox" id="remember">
+                                <span>تذكرني</span>
+                            </label>
+                            <a href="forgot-password.html" class="forgot-password">نسيت كلمة المرور؟</a>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="role"><i class="fas fa-user-tag"></i> نوع الحساب</label>
+                        <select id="role" required>
+                            <option value="">اختر نوع الحساب</option>
+                            <option value="admin">مسؤول النظام</option>
+                            <option value="receptionist">موظف استقبال</option>
+                            <option value="lab_tech">فني مختبر</option>
+                            <option value="doctor">طبيب</option>
+                            <option value="billing">موظف الفواتير</option>
+                            <option value="inventory">مدير المخزون</option>
+                            <option value="lab_supervisor">مشرف مختبر</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn-login" id="login-btn">
+                        <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+                        <span class="spinner" id="login-spinner" style="display: none;">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </span>
+                    </button>
+                    
+                    <div class="divider">
+                        <span>أو</span>
+                    </div>
+                    
+                    <button type="button" class="btn-guest" id="guest-btn">
+                        <i class="fas fa-eye"></i> دخول كمستخدم تجريبي
+                    </button>
+                </form>
+                
+                <!-- روابط إضافية -->
+                <div class="additional-links">
+                    <p>لا تملك حساباً؟ <a href="register.html">طلب حساب جديد</a></p>
+                    <p>مشكلة في الدخول؟ <a href="support.html">اتصل بالدعم الفني</a></p>
+                </div>
+                
+                <!-- معلومات الاتصال -->
+                <div class="contact-info">
+                    <p><i class="fas fa-phone"></i> الدعم الفني: ١٩٠٠٠</p>
+                    <p><i class="fas fa-envelope"></i> البريد الإلكتروني: support@labsystem.com</p>
+                    <p><i class="fas fa-clock"></i> ساعات العمل: ٨ صباحاً - ٥ مساءً (طوال الأسبوع)</p>
+                </div>
+            </div>
+            
+            <!-- لقطات شاشة للنظام -->
+            <div class="screenshots">
+                <h4><i class="fas fa-desktop"></i> نظرة على النظام</h4>
+                <div class="screenshots-grid">
+                    <div class="screenshot">
+                        <img src="https://via.placeholder.com/300x180/3498db/ffffff?text=لوحة+التحكم" alt="لوحة التحكم">
+                        <p>لوحة التحكم الرئيسية</p>
+                    </div>
+                    <div class="screenshot">
+                        <img src="https://via.placeholder.com/300x180/2ecc71/ffffff?text=إدارة+المرضى" alt="إدارة المرضى">
+                        <p>إدارة سجلات المرضى</p>
+                    </div>
+                    <div class="screenshot">
+                        <img src="https://via.placeholder.com/300x180/e74c3c/ffffff?text=نتائج+الفحوصات" alt="نتائج الفحوصات">
+                        <p>نتائج وتحاليل الفحوصات</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- نافذة المستخدم التجريبي -->
+    <div class="modal-overlay" id="guest-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-check"></i> دخول تجريبي</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>اختر دوراً للدخول كنموذج تجريبي (بيانات وهمية للعرض فقط):</p>
+                
+                <div class="guest-roles">
+                    <div class="guest-role" data-role="admin">
+                        <div class="role-icon">
+                            <i class="fas fa-user-cog"></i>
+                        </div>
+                        <div class="role-info">
+                            <h4>مسؤول النظام</h4>
+                            <p>صلاحيات كاملة على جميع أجزاء النظام</p>
+                            <small>مستخدم تجريبي: admin / password123</small>
+                        </div>
+                    </div>
+                    
+                    <div class="guest-role" data-role="receptionist">
+                        <div class="role-icon">
+                            <i class="fas fa-user-headset"></i>
+                        </div>
+                        <div class="role-info">
+                            <h4>موظف استقبال</h4>
+                            <p>إدارة المرضى وتسجيل الفحوصات الجديدة</p>
+                            <small>مستخدم تجريبي: reception / password123</small>
+                        </div>
+                    </div>
+                    
+                    <div class="guest-role" data-role="lab_tech">
+                        <div class="role-icon">
+                            <i class="fas fa-vial"></i>
+                        </div>
+                        <div class="role-info">
+                            <h4>فني مختبر</h4>
+                            <p>إدخال النتائج وتتبع العينات</p>
+                            <small>مستخدم تجريبي: labtech / password123</small>
+                        </div>
+                    </div>
+                    
+                    <div class="guest-role" data-role="doctor">
+                        <div class="role-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <div class="role-info">
+                            <h4>طبيب</h4>
+                            <p>طلب الفحوصات وعرض النتائج والتاريخ المرضي</p>
+                            <small>مستخدم تجريبي: doctor / password123</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="warning-message">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>هذا حساب تجريبي للعرض فقط. البيانات ليست حقيقية ولا يمكن استخدامها لأغراض حقيقية.</p>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn btn-secondary close-modal">إلغاء</button>
+                    <button class="btn btn-primary" id="confirm-guest">الدخول كضيف</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // عرض/إخفاء كلمة المرور
+        const togglePassword = document.getElementById('toggle-password');
+        const passwordInput = document.getElementById('password');
+        
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+        });
+        
+        // فتح نافذة المستخدم التجريبي
+        const guestBtn = document.getElementById('guest-btn');
+        const guestModal = document.getElementById('guest-modal');
+        const closeModalBtns = document.querySelectorAll('.close-modal');
+        
+        guestBtn.addEventListener('click', () => {
+            guestModal.style.display = 'flex';
+        });
+        
+        closeModalBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                guestModal.style.display = 'none';
+            });
+        });
+        
+        guestModal.addEventListener('click', (e) => {
+            if (e.target === guestModal) {
+                guestModal.style.display = 'none';
+            }
+        });
+        
+        // اختيار دور الضيف
+        const guestRoles = document.querySelectorAll('.guest-role');
+        let selectedGuestRole = '';
+        
+        guestRoles.forEach(role => {
+            role.addEventListener('click', function() {
+                guestRoles.forEach(r => r.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedGuestRole = this.getAttribute('data-role');
+            });
+        });
+        
+        // تأكيد دخول الضيف
+        document.getElementById('confirm-guest').addEventListener('click', function() {
+            if (!selectedGuestRole) {
+                alert('يرجى اختيار دور للدخول التجريبي');
+                return;
+            }
+            
+            // تعبئة بيانات الدخول تلقائياً
+            const roleCredentials = {
+                admin: { username: 'admin', password: 'password123' },
+                receptionist: { username: 'reception', password: 'password123' },
+                lab_tech: { username: 'labtech', password: 'password123' },
+                doctor: { username: 'doctor', password: 'password123' },
+                billing: { username: 'billing', password: 'password123' },
+                inventory: { username: 'inventory', password: 'password123' },
+                lab_supervisor: { username: 'supervisor', password: 'password123' }
+            };
+            
+            const creds = roleCredentials[selectedGuestRole];
+            if (creds) {
+                document.getElementById('username').value = creds.username;
+                document.getElementById('password').value = creds.password;
+                document.getElementById('role').value = selectedGuestRole;
+                guestModal.style.display = 'none';
+                alert(`تم تعبئة بيانات الدخول للدور: ${selectedGuestRole}\nيمكنك الآن النقر على "تسجيل الدخول"`);
+            }
+        });
+        
+        // معالجة تسجيل الدخول
+        const loginForm = document.getElementById('login-form');
+        const loginBtn = document.getElementById('login-btn');
+        const loginSpinner = document.getElementById('login-spinner');
+        const errorMessage = document.getElementById('error-message');
+        const errorText = document.getElementById('error-text');
+        
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value;
+            const remember = document.getElementById('remember').checked;
+            
+            // التحقق من الحقول
+            if (!username || !password || !role) {
+                showError('يرجى ملء جميع الحقول المطلوبة');
+                return;
+            }
+            
+            // عرض مؤشر التحميل
+            loginBtn.disabled = true;
+            loginSpinner.style.display = 'inline-block';
+            
+            // محاكاة اتصال بالخادم
+            setTimeout(() => {
+                // بيانات الدخول الصحيحة للعرض (في بيئة حقيقية يتم التحقق من قاعدة البيانات)
+                const validCredentials = [
+                    { user: 'admin', pass: 'admin123', role: 'admin', redirect: 'admin/index.html' },
+                    { user: 'reception', pass: 'reception123', role: 'receptionist', redirect: 'receptionist-dashboard.html' },
+                    { user: 'labtech', pass: 'labtech123', role: 'lab_tech', redirect: 'labtech-dashboard.html' },
+                    { user: 'doctor', pass: 'doctor123', role: 'doctor', redirect: 'doctor-dashboard.html' },
+                    { user: 'billing', pass: 'billing123', role: 'billing', redirect: 'billing-dashboard.html' },
+                    { user: 'inventory', pass: 'inventory123', role: 'inventory', redirect: 'inventory-dashboard.html' },
+                    { user: 'supervisor', pass: 'supervisor123', role: 'lab_supervisor', redirect: 'supervisor-dashboard.html' }
+                ];
+                
+                // التحقق من بيانات الدخول
+                const isValid = validCredentials.some(cred => 
+                    (username === cred.user || username === `${cred.user}@lab.com`) && 
+                    password === cred.pass && 
+                    role === cred.role
+                );
+                
+                if (isValid) {
+                    // تسجيل الدخول الناجح
+                    console.log('تسجيل الدخول ناجح:', { username, role, remember });
+                    
+                    // في بيئة حقيقية، هنا يتم حفظ token أو session
+                    if (remember) {
+                        localStorage.setItem('rememberedUser', username);
+                    }
+                    
+                    // إعادة التوجيه حسب الدور
+                    const userCred = validCredentials.find(cred => 
+                        (username === cred.user || username === `${cred.user}@lab.com`) && 
+                        role === cred.role
+                    );
+                    
+                    if (userCred) {
+                        // محاكاة تأخير قبل التوجيه
+                        setTimeout(() => {
+                            window.location.href = userCred.redirect;
+                        }, 500);
+                    }
+                } else {
+                    // فشل تسجيل الدخول
+                    showError('اسم المستخدم أو كلمة المرور غير صحيحة');
+                    loginBtn.disabled = false;
+                    loginSpinner.style.display = 'none';
+                }
+            }, 1500);
+        });
+        
+        function showError(message) {
+            errorText.textContent = message;
+            errorMessage.style.display = 'flex';
+            
+            // إخفاء رسالة الخطأ بعد 5 ثواني
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 5000);
+        }
+        
+        // استعادة بيانات تذكرني إن وجدت
+        window.addEventListener('DOMContentLoaded', function() {
+            const rememberedUser = localStorage.getItem('rememberedUser');
+            if (rememberedUser) {
+                document.getElementById('username').value = rememberedUser;
+                document.getElementById('remember').checked = true;
+            }
+            
+            // تحديث التاريخ والوقت
+            updateDateTime();
+            setInterval(updateDateTime, 60000);
+        });
+        
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            
+            // يمكن عرض التاريخ في مكان ما إذا أردت
+            // document.getElementById('current-datetime').textContent = now.toLocaleDateString('ar-EG', options);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة المخزون - نظام معلومات المختبر</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="inventory.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- الشريط الجانبي -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-flask"></i>
+                <h2>نظام المختبر LIS</h2>
+            </div>
+            <ul class="menu">
+                 <li class="active"><a href="#"><i class="fas fa-tachometer-alt"></i> لوحة التحكم</a></li>
+                <li><a href="users.html"><i class="fas fa-users"></i> إدارة المستخدمين</a></li>
+                <li><a href="statistics.html"><i class="fas fa-chart-bar"></i> الإحصائيات</a></li>
+                <li><a href="permissions.html"><i class="fas fa-user-shield"></i> إدارة الصلاحيات</a></li>
+                <li><a href="audit.html"><i class="fas fa-history"></i> Audit Trail</a></li>
+                <li><a href="inventory.html"><i class="fas fa-boxes"></i> المخزون</a></li>
+                <li><a href="reports.html"><i class="fas fa-file-pdf"></i> التقارير</a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> الإعدادات</a></li>
+            </ul>
+            <div class="user-info">
+                <img src="https://ui-avatars.com/api/?name=مدير+المخزون&background=FF9800&color=fff" alt="صورة المستخدم">
+                <div>
+                    <h4>ياسر حسين</h4>
+                    <p>مدير المخزون</p>
+                </div>
+                <a href="logout.html" class="logout"><i class="fas fa-sign-out-alt"></i></a>
+            </div>
+        </aside>
+
+        <!-- المحتوى الرئيسي -->
+        <main class="main-content">
+            <!-- الشريط العلوي -->
+            <header class="topbar">
+                <div class="search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="ابحث عن صنف في المخزون...">
+                </div>
+                <div class="topbar-right">
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">8</span>
+                    </div>
+                    <div class="date-display">
+                        <i class="far fa-calendar-alt"></i>
+                        <span id="current-date">--/--/----</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- محتوى المخزون -->
+            <section class="inventory-content">
+                <div class="page-header">
+                    <h1><i class="fas fa-boxes"></i> إدارة المخزون</h1>
+                    <p>مراقبة وإدارة مخزون المواد والأدوات في المختبر.</p>
+                </div>
+
+                <!-- الإحصائيات السريعة -->
+                <div class="inventory-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: #4CAF50;">
+                            <i class="fas fa-box-open"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>١,٢٤٥</h3>
+                            <p>إجمالي الأصناف</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: #2196F3;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>٣٤</h3>
+                            <p>أصناف منخفضة</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: #FF9800;">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>٢٨</h3>
+                            <p>فئات المخزون</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: #9C27B0;">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>١٢</h3>
+                            <p>طلبات شراء معلقة</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- أدوات التحكم -->
+                <div class="inventory-controls">
+                    <div class="controls-left">
+                        <button class="btn btn-primary" id="add-item">
+                            <i class="fas fa-plus-circle"></i> إضافة صنف جديد
+                        </button>
+                        <button class="btn btn-secondary" id="adjust-stock">
+                            <i class="fas fa-exchange-alt"></i> تعديل المخزون
+                        </button>
+                        <button class="btn btn-secondary" id="new-order">
+                            <i class="fas fa-cart-plus"></i> طلب شراء جديد
+                        </button>
+                    </div>
+                    <div class="controls-right">
+                        <div class="filter-group">
+                            <label><i class="fas fa-filter"></i> الفئة</label>
+                            <select id="category-filter">
+                                <option value="">جميع الفئات</option>
+                                <option value="chemicals">الكيماويات</option>
+                                <option value="reagents">الكواشف</option>
+                                <option value="consumables">المواد الاستهلاكية</option>
+                                <option value="equipment">الأجهزة والمعدات</option>
+                                <option value="glassware">الأواني الزجاجية</option>
+                                <option value="safety">معدات السلامة</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label><i class="fas fa-tachometer-alt"></i> الحالة</label>
+                            <select id="status-filter">
+                                <option value="">جميع الحالات</option>
+                                <option value="normal">طبيعي</option>
+                                <option value="low">منخفض</option>
+                                <option value="critical">حرج</option>
+                                <option value="out">نفاد</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-export">
+                            <i class="fas fa-file-export"></i> تصدير
+                        </button>
+                    </div>
+                </div>
+
+                <!-- جدول المخزون -->
+                <div class="inventory-table-container">
+                    <div class="table-header">
+                        <h4><i class="fas fa-box"></i> قائمة المخزون</h4>
+                        <div class="table-actions">
+                            <div class="pagination-info">
+                                عرض <span id="start-row">١</span> - <span id="end-row">١٠</span> من <span id="total-rows">١,٢٤٥</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="table-wrapper">
+                        <table class="inventory-table">
+                            <thead>
+                                <tr>
+                                    <th>كود الصنف</th>
+                                    <th>اسم الصنف</th>
+                                    <th>الفئة</th>
+                                    <th>الكمية المتاحة</th>
+                                    <th>الحد الأدنى</th>
+                                    <th>الوحدة</th>
+                                    <th>الحالة</th>
+                                    <th>آخر تحديث</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- صنف 1 -->
+                                <tr class="status-low">
+                                    <td><span class="item-code">CHEM-001</span></td>
+                                    <td>
+                                        <div class="item-cell">
+                                            <div class="item-color" style="background-color: #4CAF50;"></div>
+                                            <div>
+                                                <strong>جلوكوز أكسيديز</strong>
+                                                <small>لتحليل سكر الدم</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="category-badge category-chemicals">كيماويات</span></td>
+                                    <td>
+                                        <div class="quantity-cell">
+                                            <span class="quantity">٤٥</span>
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" style="width: 30%;"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>٥٠</td>
+                                    <td>زجاجة</td>
+                                    <td>
+                                        <span class="status-badge status-low">
+                                            <i class="fas fa-exclamation-triangle"></i> منخفض
+                                        </span>
+                                    </td>
+                                    <td>٢٠٢٤-٠٤-٢٨</td>
+                                    <td>
+                                        <button class="btn-icon btn-edit" title="تعديل">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-icon btn-use" title="استخدام">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button class="btn-icon btn-order" title="طلب شراء">
+                                            <i class="fas fa-cart-plus"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                
+                                <!-- صنف 2 -->
+                                <tr class="status-critical">
+                                    <td><span class="item-code">REAG-023</span></td>
+                                    <td>
+                                        <div class="item-cell">
+                                            <div class="item-color" style="background-color: #2196F3;"></div>
+                                            <div>
+                                                <strong>شرائط قياس السكر</strong>
+                                                <small>لأجهزة القياس المنزلية</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="category-badge category-reagents">كواشف</span></td>
+                                    <td>
+                                        <div class="quantity-cell">
+                                            <span class="quantity">٨</span>
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" style="width: 8%;"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>١٠٠</td>
+                                    <td>علبة</td>
+                                    <td>
+                                        <span class="status-badge status-critical">
+                                            <i class="fas fa-skull-crossbones"></i> حرج
+                                        </span>
+                                    </td>
+                                    <td>٢٠٢٤-٠٤-٣٠</td>
+                                    <td>
+                                        <button class="btn-icon btn-edit" title="تعديل">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-icon btn-use" title="استخدام">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button class="btn-icon btn-order" title="طلب شراء">
+                                            <i class="fas fa-cart-plus"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                
+                                <!-- صنف 3 -->
+                                <tr class="status-normal">
+                                    <td><span class="item-code">CONS-456</span></td>
+                                    <td>
+                                        <div class="item-cell">
+                                            <div class="item-color" style="background-color: #FF9800;"></div>
+                                            <div>
+                                                <strong>محاقن ٥ مل</strong>
+                                                <small>لأخذ عينات الدم</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="category-badge category-consumables">استهلاكية</span></td>
+                                    <td>
+                                        <div class="quantity-cell">
+                                            <span class="quantity">٢,٣٤٠</span>
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" style="width: 78%;"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>٣,٠٠٠</td>
+                                    <td>قطعة</td>
+                                    <td>
+                                        <span class="status-badge status-normal">
+                                            <i class="fas fa-check-circle"></i> طبيعي
+                                        </span>
+                                    </td>
+                                    <td>٢٠٢٤-٠٤-٢٥</td>
+                                    <td>
+                                        <button class="btn-icon btn-edit" title="تعديل">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-icon btn-use" title="استخدام">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button class="btn-icon btn-order" title="طلب شراء">
+                                            <i class="fas fa-cart-plus"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                
+                                <!-- صنف 4 -->
+                                <tr class="status-out">
+                                    <td><span class="item-code">GLAS-789</span></td>
+                                    <td>
+                                        <div class="item-cell">
+                                            <div class="item-color" style="background-color: #9C27B0;"></div>
+                                            <div>
+                                                <strong>أنابيب اختبار زجاجية</strong>
+                                                <small>٧٥×١٢ مم</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="category-badge category-glassware">زجاجيات</span></td>
+                                    <td>
+                                        <div class="quantity-cell">
+                                            <span class="quantity">٠</span>
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" style="width: 0%;"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>٥٠٠</td>
+                                    <td>قطعة</td>
+                                    <td>
+                                        <span class="status-badge status-out">
+                                            <i class="fas fa-times-circle"></i> نفاد
+                                        </span>
+                                    </td>
+                                    <td>٢٠٢٤-٠٤-٢٩</td>
+                                    <td>
+                                        <button class="btn-icon btn-edit" title="تعديل">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-icon btn-order" title="طلب شراء">
+                                            <i class="fas fa-cart-plus"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                
+                                <!-- صنف 5 -->
+                                <tr class="status-normal">
+                                    <td><span class="item-code">EQIP-321</span></td>
+                                    <td>
+                                        <div class="item-cell">
+                                            <div class="item-color" style="background-color: #00BCD4;"></div>
+                                            <div>
+                                                <strong>جهاز قياس الحموضة</strong>
+                                                <small>رقمي - دقيق</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="category-badge category-equipment">معدات</span></td>
+                                    <td>
+                                        <div class="quantity-cell">
+                                            <span class="quantity">٥</span>
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" style="width: 100%;"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>٢</td>
+                                    <td>جهاز</td>
+                                    <td>
+                                        <span class="status-badge status-normal">
+                                            <i class="fas fa-check-circle"></i> طبيعي
+                                        </span>
+                                    </td>
+                                    <td>٢٠٢٤-٠٣-١٥</td>
+                                    <td>
+                                        <button class="btn-icon btn-edit" title="تعديل">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-icon btn-use" title="استخدام">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- التنبيهات والتحذيرات -->
+                <div class="alerts-section">
+                    <h4><i class="fas fa-bell"></i> تنبيهات المخزون</h4>
+                    <div class="alerts-grid">
+                        <div class="alert-card critical">
+                            <div class="alert-icon">
+                                <i class="fas fa-skull-crossbones"></i>
+                            </div>
+                            <div class="alert-content">
+                                <h5>نفاد كامل</h5>
+                                <p>أنابيب الاختبار الزجاجية - نفدت تماماً</p>
+                                <span class="alert-time">منذ يومين</span>
+                            </div>
+                            <button class="btn-alert">طلب فوري</button>
+                        </div>
+                        
+                        <div class="alert-card warning">
+                            <div class="alert-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="alert-content">
+                                <h5>مخزون منخفض</h5>
+                                <p>شرائط قياس السكر - ٨ وحدة متبقية</p>
+                                <span class="alert-time">منذ ٦ ساعات</span>
+                            </div>
+                            <button class="btn-alert">إعادة طلب</button>
+                        </div>
+                        
+                        <div class="alert-card info">
+                            <div class="alert-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="alert-content">
+                                <h5>وصول شحنة</h5>
+                                <p>محاقن ٣ مل - ٥٠٠ قطعة وصلت اليوم</p>
+                                <span class="alert-time">منذ ٣ ساعات</span>
+                            </div>
+                            <button class="btn-alert">تأكيد</button>
+                        </div>
+                        
+                        <div class="alert-card warning">
+                            <div class="alert-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="alert-content">
+                                <h5>تاريخ انتهاء</h5>
+                                <p>جلوكوز أكسيديز - تنتهي صلاحيته بعد ١٥ يوم</p>
+                                <span class="alert-time">منذ أسبوع</span>
+                            </div>
+                            <button class="btn-alert">تفاصيل</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- طلبات الشراء المعلقة -->
+                <div class="orders-section">
+                    <div class="section-header">
+                        <h4><i class="fas fa-shopping-cart"></i> طلبات الشراء المعلقة</h4>
+                        <button class="btn btn-secondary btn-sm">عرض الكل</button>
+                    </div>
+                    <div class="orders-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>رقم الطلب</th>
+                                    <th>المورد</th>
+                                    <th>الأصناف</th>
+                                    <th>القيمة الإجمالية</th>
+                                    <th>الحالة</th>
+                                    <th>التاريخ المتوقع</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>PO-2024-045</td>
+                                    <td>شركة الكيماويات الطبية</td>
+                                    <td>٥ أصناف</td>
+                                    <td>١٥,٤٥٠ ج.م</td>
+                                    <td><span class="order-status pending">قيد الموافقة</span></td>
+                                    <td>٢٠٢٤-٠٥-١٠</td>
+                                    <td>
+                                        <button class="btn-icon btn-approve" title="موافقة">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                        <button class="btn-icon btn-view" title="عرض">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>PO-2024-044</td>
+                                    <td>مورد الأدوات الزجاجية</td>
+                                    <td>٣ أصناف</td>
+                                    <td>٨,٢٠٠ ج.م</td>
+                                    <td><span class="order-status approved">مقبول</span></td>
+                                    <td>٢٠٢٤-٠٥-٠٥</td>
+                                    <td>
+                                        <button class="btn-icon btn-track" title="تتبع">
+                                            <i class="fas fa-truck"></i>
+                                        </button>
+                                        <button class="btn-icon btn-view" title="عرض">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>PO-2024-043</td>
+                                    <td>شركة الكواشف الحديثة</td>
+                                    <td>٧ أصناف</td>
+                                    <td>٢٣,٨٠٠ ج.م</td>
+                                    <td><span class="order-status delivered">تم التسليم</span></td>
+                                    <td>٢٠٢٤-٠٤-٢٨</td>
+                                    <td>
+                                        <button class="btn-icon btn-receive" title="استلام">
+                                            <i class="fas fa-box-open"></i>
+                                        </button>
+                                        <button class="btn-icon btn-view" title="عرض">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="footer">
+                <p>© ٢٠٢٤ نظام معلومات المختبر (LIS) - مشروع تخرج - جميع الحقوق محفوظة</p>
+                <p>الإصدار ٢.١.٠ | آخر تحديث: ٢٥ أبريل ٢٠٢٤</p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- نافذة إضافة/تعديل صنف -->
+    <div class="modal-overlay" id="item-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus-circle"></i> إضافة صنف جديد للمخزون</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="item-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="item-name"><i class="fas fa-tag"></i> اسم الصنف</label>
+                            <input type="text" id="item-name" placeholder="أدخل اسم الصنف" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="item-code"><i class="fas fa-barcode"></i> كود الصنف</label>
+                            <input type="text" id="item-code" placeholder="مثل: CHEM-001" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="item-category"><i class="fas fa-folder"></i> الفئة</label>
+                            <select id="item-category" required>
+                                <option value="">اختر الفئة</option>
+                                <option value="chemicals">الكيماويات</option>
+                                <option value="reagents">الكواشف</option>
+                                <option value="consumables">المواد الاستهلاكية</option>
+                                <option value="equipment">الأجهزة والمعدات</option>
+                                <option value="glassware">الأواني الزجاجية</option>
+                                <option value="safety">معدات السلامة</option>
+                                <option value="other">أخرى</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="item-unit"><i class="fas fa-balance-scale"></i> الوحدة</label>
+                            <select id="item-unit" required>
+                                <option value="">اختر الوحدة</option>
+                                <option value="piece">قطعة</option>
+                                <option value="bottle">زجاجة</option>
+                                <option value="box">علبة</option>
+                                <option value="pack">علبة</option>
+                                <option value="liter">لتر</option>
+                                <option value="gram">جرام</option>
+                                <option value="ml">مل</option>
+                                <option value="set">مجموعة</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="current-quantity"><i class="fas fa-box"></i> الكمية الحالية</label>
+                            <input type="number" id="current-quantity" min="0" value="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="min-quantity"><i class="fas fa-exclamation-triangle"></i> الحد الأدنى</label>
+                            <input type="number" id="min-quantity" min="1" value="10" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="max-quantity"><i class="fas fa-check-circle"></i> الحد الأقصى</label>
+                            <input type="number" id="max-quantity" min="1" value="100">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="item-price"><i class="fas fa-money-bill-wave"></i> سعر الوحدة</label>
+                            <input type="number" id="item-price" min="0" step="0.01" placeholder="٠.٠٠" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="expiry-date"><i class="fas fa-calendar-times"></i> تاريخ انتهاء الصلاحية</label>
+                            <input type="date" id="expiry-date">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="item-description"><i class="fas fa-align-left"></i> الوصف</label>
+                        <textarea id="item-description" rows="3" placeholder="وصف تفصيلي للصنف..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="item-location"><i class="fas fa-map-marker-alt"></i> موقع التخزين</label>
+                        <input type="text" id="item-location" placeholder="مثل: الرف A-3، المبرد ٢">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary close-modal">إلغاء</button>
+                        <button type="submit" class="btn btn-primary">حفظ الصنف</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة تعديل المخزون -->
+    <div class="modal-overlay" id="adjust-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-exchange-alt"></i> تعديل كمية المخزون</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="adjust-form">
+                    <div class="current-info">
+                        <h5>المنتج: <span id="adjust-item-name">جلوكوز أكسيديز</span></h5>
+                        <p>الكمية الحالية: <strong id="adjust-current-qty">٤٥</strong> <span id="adjust-unit">زجاجة</span></p>
+                    </div>
+                    
+                    <div class="adjust-options">
+                        <div class="option">
+                            <label>
+                                <input type="radio" name="adjust-type" value="add" checked>
+                                <span class="option-content">
+                                    <i class="fas fa-plus-circle"></i>
+                                    <span>إضافة إلى المخزون</span>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="option">
+                            <label>
+                                <input type="radio" name="adjust-type" value="subtract">
+                                <span class="option-content">
+                                    <i class="fas fa-minus-circle"></i>
+                                    <span>خصم من المخزون</span>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="option">
+                            <label>
+                                <input type="radio" name="adjust-type" value="set">
+                                <span class="option-content">
+                                    <i class="fas fa-equals"></i>
+                                    <span>تعيين قيمة جديدة</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="adjust-quantity">الكمية</label>
+                        <input type="number" id="adjust-quantity" min="1" value="1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="adjust-reason">سبب التعديل</label>
+                        <select id="adjust-reason">
+                            <option value="purchase">شراء جديد</option>
+                            <option value="consumption">استهلاك</option>
+                            <option value="damage">تلف/كسر</option>
+                            <option value="expiry">انتهاء صلاحية</option>
+                            <option value="transfer">نقل بين المخازن</option>
+                            <option value="correction">تصحيح خطأ</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="adjust-notes">ملاحظات</label>
+                        <textarea id="adjust-notes" rows="2" placeholder="ملاحظات إضافية..."></textarea>
+                    </div>
+                    
+                    <div class="preview">
+                        <p>الكمية بعد التعديل: <strong id="adjusted-total">٤٦</strong> <span id="adjusted-unit">زجاجة</span></p>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary close-modal">إلغاء</button>
+                        <button type="button" class="btn btn-primary" id="confirm-adjust">تأكيد التعديل</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // عرض التاريخ الحالي
+        const now = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-date').textContent = now.toLocaleDateString('ar-EG', options);
+
+        // النوافذ المنبثقة
+        const addItemBtn = document.getElementById('add-item');
+        const adjustStockBtn = document.getElementById('adjust-stock');
+        const itemModal = document.getElementById('item-modal');
+        const adjustModal = document.getElementById('adjust-modal');
+        const closeModalBtns = document.querySelectorAll('.close-modal');
+        
+        addItemBtn.addEventListener('click', () => {
+            itemModal.style.display = 'flex';
+        });
+        
+        adjustStockBtn.addEventListener('click', () => {
+            adjustModal.style.display = 'flex';
+        });
+        
+        closeModalBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                itemModal.style.display = 'none';
+                adjustModal.style.display = 'none';
+            });
+        });
+        
+        [itemModal, adjustModal].forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+
+        // فلترة الجدول
+        const categoryFilter = document.getElementById('category-filter');
+        const statusFilter = document.getElementById('status-filter');
+        
+        function filterTable() {
+            const category = categoryFilter.value;
+            const status = statusFilter.value;
+            
+            const rows = document.querySelectorAll('.inventory-table tbody tr');
+            rows.forEach(row => {
+                const rowCategory = row.querySelector('.category-badge').textContent.trim();
+                const rowStatus = row.querySelector('.status-badge').textContent.trim();
+                
+                let show = true;
+                
+                if (category && !rowCategory.includes(categoryFilter.options[categoryFilter.selectedIndex].text)) {
+                    show = false;
+                }
+                
+                if (status && !rowStatus.includes(statusFilter.options[statusFilter.selectedIndex].text)) {
+                    show = false;
+                }
+                
+                row.style.display = show ? '' : 'none';
+            });
+        }
+        
+        categoryFilter.addEventListener('change', filterTable);
+        statusFilter.addEventListener('change', filterTable);
+
+        // تعديل المخزون - حساب الكمية الجديدة
+        const adjustTypeRadios = document.querySelectorAll('input[name="adjust-type"]');
+        const adjustQuantity = document.getElementById('adjust-quantity');
+        const adjustedTotal = document.getElementById('adjusted-total');
+        const currentQty = document.getElementById('adjust-current-qty');
+        
+        function calculateAdjustedTotal() {
+            const current = parseInt(currentQty.textContent) || 0;
+            const quantity = parseInt(adjustQuantity.value) || 0;
+            const type = document.querySelector('input[name="adjust-type"]:checked').value;
+            
+            let total = current;
+            
+            switch(type) {
+                case 'add':
+                    total = current + quantity;
+                    break;
+                case 'subtract':
+                    total = current - quantity;
+                    if (total < 0) total = 0;
+                    break;
+                case 'set':
+                    total = quantity;
+                    break;
+            }
+            
+            adjustedTotal.textContent = total;
+        }
+        
+        adjustTypeRadios.forEach(radio => {
+            radio.addEventListener('change', calculateAdjustedTotal);
+        });
+        
+        adjustQuantity.addEventListener('input', calculateAdjustedTotal);
+
+        // تأكيد تعديل المخزون
+        document.getElementById('confirm-adjust').addEventListener('click', function() {
+            const type = document.querySelector('input[name="adjust-type"]:checked').value;
+            const quantity = adjustQuantity.value;
+            const reason = document.getElementById('adjust-reason').value;
+            const notes = document.getElementById('adjust-notes').value;
+            
+            if (!quantity || quantity <= 0) {
+                alert('يرجى إدخال كمية صحيحة');
+                return;
+            }
+            
+            if (confirm(`هل تريد ${type === 'add' ? 'إضافة' : type === 'subtract' ? 'خصم' : 'تعيين'} ${quantity} وحدة؟`)) {
+                alert('تم تحديث المخزون بنجاح!');
+                adjustModal.style.display = 'none';
+                
+                // في بيئة حقيقية، هنا يتم تحديث قاعدة البيانات
+                // وإعادة تحميل الجدول
+            }
+        });
+
+        // استخدام صنف من المخزون
+        const useButtons = document.querySelectorAll('.btn-use');
+        useButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const row = this.closest('tr');
+                const itemName = row.querySelector('strong').textContent;
+                const currentQty = row.querySelector('.quantity').textContent;
+                
+                const quantity = prompt(`كمية الاستخدام من "${itemName}" (المتاح: ${currentQty}):`, "1");
+                
+                if (quantity && !isNaN(quantity) && quantity > 0) {
+                    if (parseInt(quantity) > parseInt(currentQty)) {
+                        alert('الكمية المطلوبة أكبر من المخزون المتاح!');
+                        return;
+                    }
+                    
+                    const reason = prompt('سبب الاستخدام:', 'استخدام في فحص');
+                    
+                    if (reason) {
+                        alert(`تم خصم ${quantity} وحدة من ${itemName}\nالسبب: ${reason}`);
+                        
+                        // في بيئة حقيقية، هنا يتم تحديث قاعدة البيانات
+                        // row.querySelector('.quantity').textContent = parseInt(currentQty) - parseInt(quantity);
+                    }
+                }
+            });
+        });
+
+        // طلب شراء لصنف
+        const orderButtons = document.querySelectorAll('.btn-order');
+        orderButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const row = this.closest('tr');
+                const itemName = row.querySelector('strong').textContent;
+                const itemCode = row.querySelector('.item-code').textContent;
+                const currentQty = row.querySelector('.quantity').textContent;
+                const minQty = row.cells[4].textContent;
+                
+                const quantity = prompt(`كمية الطلب لـ "${itemName}" (المتاح: ${currentQty}، الحد الأدنى: ${minQty}):`, minQty);
+                
+                if (quantity && !isNaN(quantity) && quantity > 0) {
+                    const supplier = prompt('اسم المورد:', 'مورد عام');
+                    const estimatedCost = prompt('التكلفة التقديرية:', '0');
+                    
+                    if (supplier && estimatedCost) {
+                        if (confirm(`إنشاء طلب شراء:\nالصنف: ${itemName}\nالكمية: ${quantity}\nالمورد: ${supplier}\nالتكلفة: ${estimatedCost} ج.م`)) {
+                            alert('تم إنشاء طلب الشراء بنجاح وإضافته إلى القائمة المعلقة.');
+                            
+                            // في بيئة حقيقية، هنا يتم إضافة طلب جديد إلى قاعدة البيانات
+                        }
+                    }
+                }
+            });
+        });
+
+        // بحث في المخزون
+        const searchInput = document.querySelector('.search input');
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = document.querySelectorAll('.inventory-table tbody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+    </script>
+</body>
+</html>

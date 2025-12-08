@@ -1,0 +1,425 @@
+/* تنسيقات صفحة إدارة الصلاحيات */
+.permissions-management {
+    padding: 30px;
+}
+
+.page-header {
+    margin-bottom: 30px;
+}
+
+.page-header h1 {
+    font-size: 28px;
+    color: #2c3e50;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.page-header h1 i {
+    margin-left: 15px;
+    color: #3498db;
+}
+
+.page-header p {
+    color: #7f8c8d;
+}
+
+/* اختيار الدور */
+.role-selector {
+    background-color: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.role-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.role-header h3 {
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+}
+
+.role-header h3 i {
+    margin-left: 10px;
+    color: #7f8c8d;
+}
+
+.roles-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.role-tab {
+    padding: 12px 20px;
+    background-color: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-weight: 600;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+}
+
+.role-tab:hover {
+    background-color: #e3f2fd;
+    border-color: #3498db;
+}
+
+.role-tab.active {
+    background-color: #3498db;
+    border-color: #3498db;
+    color: white;
+}
+
+/* معلومات الدور */
+.role-info {
+    margin-bottom: 30px;
+}
+
+.role-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    color: white;
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+}
+
+.role-icon {
+    width: 70px;
+    height: 70px;
+    background-color: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 20px;
+}
+
+.role-icon i {
+    font-size: 30px;
+}
+
+.role-details {
+    flex: 1;
+}
+
+.role-details h3 {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.role-details p {
+    opacity: 0.9;
+    margin-bottom: 15px;
+}
+
+.role-stats {
+    display: flex;
+    gap: 25px;
+}
+
+.role-stats span {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.role-stats i {
+    margin-left: 8px;
+    font-size: 16px;
+}
+
+.role-stats strong {
+    font-size: 18px;
+    margin-right: 5px;
+}
+
+.role-card .btn-secondary {
+    background-color: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+}
+
+.role-card .btn-secondary:hover {
+    background-color: rgba(255,255,255,0.3);
+}
+
+/* شبكة الصلاحيات */
+.permissions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.permission-category {
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    border: 1px solid #e9ecef;
+}
+
+.category-header {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.category-header h4 {
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+}
+
+.category-header h4 i {
+    margin-left: 10px;
+    color: #3498db;
+}
+
+.select-all-category {
+    display: flex;
+    align-items: center;
+    color: #555;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.select-all-category input {
+    margin-left: 8px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.permissions-list {
+    padding: 0;
+}
+
+.permission-item {
+    padding: 18px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.3s;
+}
+
+.permission-item:last-child {
+    border-bottom: none;
+}
+
+.permission-item:hover {
+    background-color: #f8f9fa;
+}
+
+.permission-item label {
+    display: flex;
+    align-items: flex-start;
+    cursor: pointer;
+    width: 100%;
+}
+
+.permission-item input[type="checkbox"] {
+    margin-left: 12px;
+    margin-top: 3px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.permission-name {
+    display: block;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.permission-desc {
+    display: block;
+    font-size: 13px;
+    color: #7f8c8d;
+    line-height: 1.4;
+}
+
+/* ملخص الصلاحيات */
+.permissions-summary {
+    background-color: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    border-top: 4px solid #3498db;
+}
+
+.permissions-summary h4 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+}
+
+.permissions-summary h4 i {
+    margin-left: 10px;
+    color: #3498db;
+}
+
+.summary-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.stat {
+    text-align: center;
+    flex: 1;
+    min-width: 150px;
+}
+
+.stat-number {
+    display: block;
+    font-size: 36px;
+    font-weight: 700;
+    color: #3498db;
+    margin-bottom: 5px;
+}
+
+.stat-percentage {
+    display: block;
+    font-size: 36px;
+    font-weight: 700;
+    color: #2ecc71;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    display: block;
+    color: #7f8c8d;
+    font-size: 14px;
+}
+
+.summary-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    padding-top: 20px;
+    border-top: 1px solid #e9ecef;
+}
+
+/* نافذة نسخ الصلاحيات */
+.copy-options {
+    margin: 20px 0;
+}
+
+.copy-options select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: white;
+}
+
+.warning-message {
+    background-color: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 20px 0;
+    display: flex;
+    align-items: flex-start;
+}
+
+.warning-message i {
+    color: #f39c12;
+    margin-left: 10px;
+    font-size: 20px;
+    margin-top: 2px;
+}
+
+.warning-message p {
+    color: #856404;
+    margin: 0;
+    flex: 1;
+}
+
+/* التجاوب */
+@media (max-width: 1024px) {
+    .permissions-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .role-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+    
+    .role-icon {
+        margin-left: 0;
+        margin-bottom: 10px;
+    }
+    
+    .role-stats {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .role-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .roles-tabs {
+        justify-content: center;
+    }
+    
+    .role-stats {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .summary-stats {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .stat {
+        min-width: 100%;
+    }
+    
+    .summary-actions {
+        flex-direction: column;
+    }
+    
+    .summary-actions .btn {
+        width: 100%;
+    }
+}
+
+/* تأثيرات إضافية */
+.permission-checkbox:checked + .permission-name {
+    color: #27ae60;
+}
+
+.permission-checkbox:checked + .permission-name + .permission-desc {
+    color: #2ecc71;
+}

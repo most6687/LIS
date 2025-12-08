@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التقارير - نظام معلومات المختبر</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="reports.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- الشريط الجانبي -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-flask"></i>
+                <h2>نظام المختبر LIS</h2>
+            </div>
+            <ul class="menu">
+                 <li class="active"><a href="#"><i class="fas fa-tachometer-alt"></i> لوحة التحكم</a></li>
+                <li><a href="users.html"><i class="fas fa-users"></i> إدارة المستخدمين</a></li>
+                <li><a href="statistics.html"><i class="fas fa-chart-bar"></i> الإحصائيات</a></li>
+                <li><a href="permissions.html"><i class="fas fa-user-shield"></i> إدارة الصلاحيات</a></li>
+                <li><a href="audit.html"><i class="fas fa-history"></i> Audit Trail</a></li>
+                <li><a href="inventory.html"><i class="fas fa-boxes"></i> المخزون</a></li>
+                <li><a href="reports.html"><i class="fas fa-file-pdf"></i> التقارير</a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> الإعدادات</a></li>
+           </ul>
+            <div class="user-info">
+                <img src="https://ui-avatars.com/api/?name=مدير+المخزون&background=FF9800&color=fff" alt="صورة المستخدم">
+                <div>
+                    <h4>ياسر حسين</h4>
+                    <p>مدير المخزون</p>
+                </div>
+                <a href="logout.html" class="logout"><i class="fas fa-sign-out-alt"></i></a>
+            </div>
+        </aside>
+
+        <!-- المحتوى الرئيسي -->
+        <main class="main-content">
+            <!-- الشريط العلوي -->
+            <header class="topbar">
+                <div class="search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="ابحث في التقارير...">
+                </div>
+                <div class="topbar-right">
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                    <div class="date-display">
+                        <i class="far fa-calendar-alt"></i>
+                        <span id="current-date">--/--/----</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- محتوى التقارير -->
+            <section class="reports-content">
+                <div class="page-header">
+                    <h1><i class="fas fa-file-pdf"></i> التقارير والإحصائيات</h1>
+                    <p>إنشاء وعرض وتصدير التقارير المختلفة لنظام المختبر.</p>
+                </div>
+
+                <!-- تبويبات أنواع التقارير -->
+                <div class="reports-tabs">
+                    <button class="tab-btn active" data-tab="all">جميع التقارير</button>
+                    <button class="tab-btn" data-tab="patients">تقارير المرضى</button>
+                    <button class="tab-btn" data-tab="tests">تقارير الفحوصات</button>
+                    <button class="tab-btn" data-tab="inventory">تقارير المخزون</button>
+                    <button class="tab-btn" data-tab="financial">تقارير مالية</button>
+                    <button class="tab-btn" data-tab="operational">تقارير تشغيلية</button>
+                </div>
+
+                <!-- أدوات إنشاء التقارير -->
+                <div class="report-builder">
+                    <div class="builder-header">
+                        <h3><i class="fas fa-magic"></i> إنشاء تقرير جديد</h3>
+                        <p>اختر نوع التقرير وحدد المعايير لإنشاء تقرير مخصص</p>
+                    </div>
+                    
+                    <div class="builder-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="report-type"><i class="fas fa-file-alt"></i> نوع التقرير</label>
+                                <select id="report-type">
+                                    <option value="">اختر نوع التقرير</option>
+                                    <option value="patient-list">قائمة المرضى</option>
+                                    <option value="test-results">نتائج الفحوصات</option>
+                                    <option value="inventory-status">حالة المخزون</option>
+                                    <option value="financial-summary">ملخص مالي</option>
+                                    <option value="daily-activity">نشاط اليوم</option>
+                                    <option value="custom">تقرير مخصص</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="date-range"><i class="fas fa-calendar-alt"></i> الفترة الزمنية</label>
+                                <select id="date-range">
+                                    <option value="today">اليوم</option>
+                                    <option value="yesterday">أمس</option>
+                                    <option value="week">هذا الأسبوع</option>
+                                    <option value="month">هذا الشهر</option>
+                                    <option value="quarter">هذا الربع</option>
+                                    <option value="year">هذه السنة</option>
+                                    <option value="custom">مخصص</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row" id="custom-dates" style="display: none;">
+                            <div class="form-group">
+                                <label for="start-date">من تاريخ</label>
+                                <input type="date" id="start-date">
+                            </div>
+                            <div class="form-group">
+                                <label for="end-date">إلى تاريخ</label>
+                                <input type="date" id="end-date">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-filter"></i> عوامل التصفية</label>
+                            <div class="filter-options">
+                                <div class="filter-item">
+                                    <input type="checkbox" id="filter-department">
+                                    <label for="filter-department">حسب القسم</label>
+                                </div>
+                                <div class="filter-item">
+                                    <input type="checkbox" id="filter-doctor">
+                                    <label for="filter-doctor">حسب الطبيب</label>
+                                </div>
+                                <div class="filter-item">
+                                    <input type="checkbox" id="filter-test">
+                                    <label for="filter-test">حسب نوع الفحص</label>
+                                </div>
+                                <div class="filter-item">
+                                    <input type="checkbox" id="filter-status">
+                                    <label for="filter-status">حسب حالة الفحص</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="report-format"><i class="fas fa-download"></i> تنسيق التقرير</label>
+                            <div class="format-options">
+                                <label class="format-option">
+                                    <input type="radio" name="format" value="pdf" checked>
+                                    <span class="format-icon">
+                                        <i class="fas fa-file-pdf"></i>
+                                        <span>PDF</span>
+                                    </span>
+                                </label>
+                                <label class="format-option">
+                                    <input type="radio" name="format" value="excel">
+                                    <span class="format-icon">
+                                        <i class="fas fa-file-excel"></i>
+                                        <span>Excel</span>
+                                    </span>
+                                </label>
+                                <label class="format-option">
+                                    <input type="radio" name="format" value="csv">
+                                    <span class="format-icon">
+                                        <i class="fas fa-file-csv"></i>
+                                        <span>CSV</span>
+                                    </span>
+                                </label>
+                                <label class="format-option">
+                                    <input type="radio" name="format" value="print">
+                                    <span class="format-icon">
+                                        <i class="fas fa-print"></i>
+                                        <span>طباعة</span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button class="btn btn-secondary" type="button">إعادة تعيين</button>
+                            <button class="btn btn-primary" id="generate-report">
+                                <i class="fas fa-cog"></i> إنشاء التقرير
+                            </button>
+                            <button class="btn btn-success" id="preview-report">
+                                <i class="fas fa-eye"></i> معاينة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- التقارير المحفوظة -->
+                <div class="saved-reports">
+                    <div class="section-header">
+                        <h3><i class="fas fa-save"></i> التقارير المحفوظة</h3>
+                        <div class="section-actions">
+                            <button class="btn btn-secondary btn-sm">
+                                <i class="fas fa-sync-alt"></i> تحديث
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="reports-grid">
+                        <!-- تقرير 1 -->
+                        <div class="report-card">
+                            <div class="report-header">
+                                <div class="report-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="report-info">
+                                    <h4>تقرير المرضى اليومي</h4>
+                                    <span class="report-date">١ مايو ٢٠٢٤</span>
+                                </div>
+                                <div class="report-actions">
+                                    <button class="btn-icon" title="تحميل">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    <button class="btn-icon" title="حذف">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="report-content">
+                                <p>تحليل شامل لحركة المرضى والفحوصات اليومية</p>
+                                <div class="report-stats">
+                                    <span>٤٥ مريض</span>
+                                    <span>٦٧ فحص</span>
+                                    <span>٥,٢٠٠ ج.م</span>
+                                </div>
+                            </div>
+                            <div class="report-footer">
+                                <span class="report-format">PDF</span>
+                                <span class="report-size">٢.٤ م.ب</span>
+                            </div>
+                        </div>
+                        
+                        <!-- تقرير 2 -->
+                        <div class="report-card">
+                            <div class="report-header">
+                                <div class="report-icon">
+                                    <i class="fas fa-vial"></i>
+                                </div>
+                                <div class="report-info">
+                                    <h4>نتائج فحوصات الدم</h4>
+                                    <span class="report-date">٣٠ أبريل ٢٠٢٤</span>
+                                </div>
+                                <div class="report-actions">
+                                    <button class="btn-icon" title="تحميل">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    <button class="btn-icon" title="حذف">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="report-content">
+                                <p>تحليل نتائج فحوصات الدم الكاملة للربع الأول</p>
+                                <div class="report-stats">
+                                    <span>٢٣٤ فحص</span>
+                                    <span>١٢٪ غير طبيعي</span>
+                                    <span>٩٨٪ دقة</span>
+                                </div>
+                            </div>
+                            <div class="report-footer">
+                                <span class="report-format">Excel</span>
+                                <span class="report-size">١.٨ م.ب</span>
+                            </div>
+                        </div>
+                        
+                        <!-- تقرير 3 -->
+                        <div class="report-card">
+                            <div class="report-header">
+                                <div class="report-icon">
+                                    <i class="fas fa-boxes"></i>
+                                </div>
+                                <div class="report-info">
+                                    <h4>تقرير المخزون الشهري</h4>
+                                    <span class="report-date">٢٨ أبريل ٢٠٢٤</span>
+                                </div>
+                                <div class="report-actions">
+                                    <button class="btn-icon" title="تحميل">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    <button class="btn-icon" title="حذف">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="report-content">
+                                <p>تحليل حركة المخزون واستهلاك المواد</p>
+                                <div class="report-stats">
+                                    <span>٣٤ إنذار</span>
+                                    <span>١٢ طلب شراء</span>
+                                    <span>٨٥٪ كفاءة</span>
+                                </div>
+                            </div>
+                            <div class="report-footer">
+                                <span class="report-format">PDF</span>
+                                <span class="report-size">٣.٢ م.ب</span>
+                            </div>
+                        </div>
+                        
+                        <!-- تقرير 4 -->
+                        <div class="report-card">
+                            <div class="report-header">
+                                <div class="report-icon">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </div>
+                                <div class="report-info">
+                                    <h4>التقرير المالي الربع سنوي</h4>
+                                    <span class="report-date">٢٥ أبريل ٢٠٢٤</span>
+                                </div>
+                                <div class="report-actions">
+                                    <button class="btn-icon" title="تحميل">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    <button class="btn-icon" title="حذف">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="report-content">
+                                <p>تحليل الإيرادات والمصروفات والأرباح</p>
+                                <div class="report-stats">
+                                    <span>٢٥٠,٠٠٠ ج.م</span>
+                                    <span>١٥٪ نمو</span>
+                                    <span>٩٢٪ تحصيل</span>
+                                </div>
+                            </div>
+                            <div class="report-footer">
+                                <span class="report-format">PDF</span>
+                                <span class="report-size">٤.١ م.ب</span>
+                            </div>
+                        </div>
+                        
+                        <!-- تقرير 5 -->
+                        <div class="report-card">
+                            <div class="report-header">
+                                <div class="report-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div class="report-info">
+                                    <h4>تحليل أداء المختبر</h4>
+                                    <span class="report-date">٢٠ أبريل ٢٠٢٤</span>
+                                </div>
+                                <div class="report-actions">
+                                    <button class="btn-icon" title="تحميل">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    <button class="btn-icon" title="حذف">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="report-content">
+                                <p>مؤشرات الأداء الرئيسية وتحليل الإنتاجية</p>
+                                <div class="report-stats">
+                                    <span>٢.٤ ساعة متوسط</span>
+                                    <span>٩٦٪ رضا</span>
+                                    <span>٨٨٪ دقة</span>
+                                </div>
+                            </div>
+                            <div class="report-footer">
+                                <span class="report-format">Excel</span>
+                                <span class="report-size">٢.٧ م.ب</span>
+                            </div>
+                        </div>
+                        
+                        <!-- تقرير 6 -->
+                        <div class="report-card">
+                            <div class="report-header">
+                                <div class="report-icon">
+                                    <i class="fas fa-user-md"></i>
+                                </div>
+                                <div class="report-info">
+                                    <h4>أداء الأطباء</h4>
+                                    <span class="report-date">١٥ أبريل ٢٠٢٤</span>
+                                </div>
+                                <div class="report-actions">
+                                    <button class="btn-icon" title="تحميل">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    <button class="btn-icon" title="حذف">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="report-content">
+                                <p>تحليل أداء الأطباء وعدد الفحوصات</p>
+                                <div class="report-stats">
+                                    <span>٥ أطباء</span>
+                                    <span>٨٩٦ فحص</span>
+                                    <span>٤.٧ تقييم</span>
+                                </div>
+                            </div>
+                            <div class="report-footer">
+                                <span class="report-format">PDF</span>
+                                <span class="report-size">١.٩ م.ب</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- قوالب التقارير -->
+                <div class="report-templates">
+                    <div class="section-header">
+                        <h3><i class="fas fa-layer-group"></i> قوالب التقارير الجاهزة</h3>
+                        <button class="btn btn-secondary btn-sm">
+                            <i class="fas fa-plus"></i> قالب جديد
+                        </button>
+                    </div>
+                    
+                    <div class="templates-grid">
+                        <div class="template-card">
+                            <div class="template-icon">
+                                <i class="fas fa-user-injured"></i>
+                            </div>
+                            <div class="template-content">
+                                <h4>تقرير مريض كامل</h4>
+                                <p>يشمل المعلومات الشخصية، التاريخ المرضي، جميع الفحوصات السابقة</p>
+                                <div class="template-meta">
+                                    <span>مخصص للطبيب</span>
+                                    <span>٨ صفحات</span>
+                                </div>
+                            </div>
+                            <button class="btn-template">استخدام</button>
+                        </div>
+                        
+                        <div class="template-card">
+                            <div class="template-icon">
+                                <i class="fas fa-vial"></i>
+                            </div>
+                            <div class="template-content">
+                                <h4>نتائج الفحص المخبرية</h4>
+                                <p>عرض النتائج مع القيم المرجعية وتفسير النتائج</p>
+                                <div class="template-meta">
+                                    <span>مخصص للمريض</span>
+                                    <span>٢ صفحات</span>
+                                </div>
+                            </div>
+                            <button class="btn-template">استخدام</button>
+                        </div>
+                        
+                        <div class="template-card">
+                            <div class="template-icon">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <div class="template-content">
+                                <h4>تقرير إحصائي شهري</h4>
+                                <p>إحصائيات ورسوم بيانية عن نشاط المختبر</p>
+                                <div class="template-meta">
+                                    <span>مخصص للإدارة</span>
+                                    <span>٦ صفحات</span>
+                                </div>
+                            </div>
+                            <button class="btn-template">استخدام</button>
+                        </div>
+                        
+                        <div class="template-card">
+                            <div class="template-icon">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                            </div>
+                            <div class="template-content">
+                                <h4>تقرير الفواتير</h4>
+                                <p>تفاصيل الفواتير والمدفوعات والمستحقات</p>
+                                <div class="template-meta">
+                                    <span>مخصص للمحاسبة</span>
+                                    <span>٤ صفحات</span>
+                                </div>
+                            </div>
+                            <button class="btn-template">استخدام</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="footer">
+                <p>© ٢٠٢٤ نظام معلومات المختبر (LIS) - مشروع تخرج - جميع الحقوق محفوظة</p>
+                <p>الإصدار ٢.١.٠ | آخر تحديث: ٢٥ أبريل ٢٠٢٤</p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- نافذة معاينة التقرير -->
+    <div class="modal-overlay" id="preview-modal">
+        <div class="modal modal-large">
+            <div class="modal-header">
+                <h3><i class="fas fa-eye"></i> معاينة التقرير</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="report-preview">
+                    <div class="preview-header">
+                        <div class="preview-title">
+                            <h2>تقرير الفحوصات اليومي</h2>
+                            <p>تاريخ التقرير: ١ مايو ٢٠٢٤</p>
+                        </div>
+                        <div class="preview-logo">
+                            <i class="fas fa-flask"></i>
+                            <span>مختبر القاهرة المركزي</span>
+                        </div>
+                    </div>
+                    
+                    <div class="preview-summary">
+                        <div class="summary-item">
+                            <h5>عدد الفحوصات</h5>
+                            <p class="summary-value">٦٧</p>
+                        </div>
+                        <div class="summary-item">
+                            <h5>عدد المرضى</h5>
+                            <p class="summary-value">٤٥</p>
+                        </div>
+                        <div class="summary-item">
+                            <h5>الإيرادات</h5>
+                            <p class="summary-value">٥,٢٠٠ ج.م</p>
+                        </div>
+                        <div class="summary-item">
+                            <h5>متوسط وقت الفحص</h5>
+                            <p class="summary-value">٢.١ ساعة</p>
+                        </div>
+                    </div>
+                    
+                    <div class="preview-table">
+                        <h4>تفاصيل الفحوصات</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>وقت الفحص</th>
+                                    <th>نوع الفحص</th>
+                                    <th>المريض</th>
+                                    <th>الطبيب</th>
+                                    <th>الحالة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>٠٨:٣٠</td>
+                                    <td>صورة دم كاملة</td>
+                                    <td>علي حسن</td>
+                                    <td>د. أحمد محمد</td>
+                                    <td>مكتمل</td>
+                                </tr>
+                                <tr>
+                                    <td>٠٩:١٥</td>
+                                    <td>سكر الدم</td>
+                                    <td>سعاد محمد</td>
+                                    <td>د. سارة علي</td>
+                                    <td>مكتمل</td>
+                                </tr>
+                                <tr>
+                                    <td>١٠:٠٠</td>
+                                    <td>وظائف كبد</td>
+                                    <td>محمد شريف</td>
+                                    <td>د. أحمد محمد</td>
+                                    <td>مكتمل</td>
+                                </tr>
+                                <tr>
+                                    <td>١١:٣٠</td>
+                                    <td>كوليسترول</td>
+                                    <td>فاطمة رضا</td>
+                                    <td>د. سارة علي</td>
+                                    <td>مكتمل</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="preview-chart">
+                        <h4>توزيع الفحوصات حسب النوع</h4>
+                        <div class="chart-placeholder">
+                            <div class="chart-bar" style="height: 80%; width: 25%;">صورة دم</div>
+                            <div class="chart-bar" style="height: 60%; width: 25%;">سكر</div>
+                            <div class="chart-bar" style="height: 40%; width: 25%;">كبد</div>
+                            <div class="chart-bar" style="height: 30%; width: 25%;">أخرى</div>
+                        </div>
+                    </div>
+                    
+                    <div class="preview-footer">
+                        <p>تم إنشاء التقرير تلقائياً بواسطة نظام معلومات المختبر (LIS)</p>
+                        <p>صفحة ١ من ٣</p>
+                    </div>
+                </div>
+                
+                <div class="preview-actions">
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-edit"></i> تعديل التقرير
+                    </button>
+                    <button class="btn btn-primary" id="download-preview">
+                        <i class="fas fa-download"></i> تحميل PDF
+                    </button>
+                    <button class="btn btn-success">
+                        <i class="fas fa-print"></i> طباعة
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // عرض التاريخ الحالي
+        const now = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-date').textContent = now.toLocaleDateString('ar-EG', options);
+
+        // تهيئة التواريخ
+        const today = new Date();
+        const weekAgo = new Date();
+        weekAgo.setDate(today.getDate() - 7);
+        
+        document.getElementById('start-date').valueAsDate = weekAgo;
+        document.getElementById('end-date').valueAsDate = today;
+
+        // تفعيل تبويبات التقارير
+        const tabBtns = document.querySelectorAll('.reports-tabs .tab-btn');
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const tab = this.getAttribute('data-tab');
+                filterReports(tab);
+            });
+        });
+
+        // إظهار/إخفاء التواريخ المخصصة
+        const dateRangeSelect = document.getElementById('date-range');
+        const customDatesDiv = document.getElementById('custom-dates');
+        
+        dateRangeSelect.addEventListener('change', function() {
+            if (this.value === 'custom') {
+                customDatesDiv.style.display = 'flex';
+            } else {
+                customDatesDiv.style.display = 'none';
+            }
+        });
+
+        // فلترة التقارير حسب النوع
+        function filterReports(type) {
+            const reportCards = document.querySelectorAll('.report-card');
+            
+            reportCards.forEach(card => {
+                if (type === 'all') {
+                    card.style.display = 'block';
+                    return;
+                }
+                
+                const reportTitle = card.querySelector('h4').textContent.toLowerCase();
+                let shouldShow = false;
+                
+                switch(type) {
+                    case 'patients':
+                        shouldShow = reportTitle.includes('مريض') || reportTitle.includes('مرضى');
+                        break;
+                    case 'tests':
+                        shouldShow = reportTitle.includes('فحص') || reportTitle.includes('نتائج');
+                        break;
+                    case 'inventory':
+                        shouldShow = reportTitle.includes('مخزون');
+                        break;
+                    case 'financial':
+                        shouldShow = reportTitle.includes('مالي') || reportTitle.includes('مادي');
+                        break;
+                    case 'operational':
+                        shouldShow = reportTitle.includes('أداء') || reportTitle.includes('تشغيلي');
+                        break;
+                }
+                
+                card.style.display = shouldShow ? 'block' : 'none';
+            });
+        }
+
+        // إنشاء تقرير جديد
+        const generateBtn = document.getElementById('generate-report');
+        const previewBtn = document.getElementById('preview-report');
+        const previewModal = document.getElementById('preview-modal');
+        const closeModalBtns = document.querySelectorAll('.close-modal');
+        
+        generateBtn.addEventListener('click', function() {
+            const reportType = document.getElementById('report-type').value;
+            const dateRange = document.getElementById('date-range').value;
+            const format = document.querySelector('input[name="format"]:checked').value;
+            
+            if (!reportType) {
+                alert('يرجى اختيار نوع التقرير');
+                return;
+            }
+            
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإنشاء...';
+            this.disabled = true;
+            
+            // محاكاة عملية إنشاء التقرير
+            setTimeout(() => {
+                this.innerHTML = '<i class="fas fa-cog"></i> إنشاء التقرير';
+                this.disabled = false;
+                
+                alert(`تم إنشاء التقرير بنجاح!\nالنوع: ${reportType}\nالفترة: ${dateRange}\nالتنسيق: ${format.toUpperCase()}`);
+                
+                // في بيئة حقيقية، هنا يتم تحميل التقرير
+                if (format === 'pdf') {
+                    window.open('#', '_blank');
+                }
+            }, 2000);
+        });
+        
+        previewBtn.addEventListener('click', () => {
+            previewModal.style.display = 'flex';
+        });
+        
+        closeModalBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                previewModal.style.display = 'none';
+            });
+        });
+        
+        previewModal.addEventListener('click', (e) => {
+            if (e.target === previewModal) {
+                previewModal.style.display = 'none';
+            }
+        });
+
+        // تحميل معاينة التقرير
+        document.getElementById('download-preview').addEventListener('click', function() {
+            alert('سيبدأ تحميل التقرير بصيغة PDF...');
+        });
+
+        // استخدام قالب تقرير
+        const templateBtns = document.querySelectorAll('.btn-template');
+        templateBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const templateCard = this.closest('.template-card');
+                const templateName = templateCard.querySelector('h4').textContent;
+                
+                if (confirm(`هل تريد استخدام قالب "${templateName}"؟`)) {
+                    alert('تم تحميل قالب التقرير. يمكنك الآن تعديله حسب احتياجاتك.');
+                    // في بيئة حقيقية، هنا يتم تحميل إعدادات القالب
+                }
+            });
+        });
+
+        // تحميل تقرير محفوظ
+        const downloadBtns = document.querySelectorAll('.report-actions .btn-icon:first-child');
+        downloadBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const reportCard = this.closest('.report-card');
+                const reportName = reportCard.querySelector('h4').textContent;
+                const reportFormat = reportCard.querySelector('.report-format').textContent;
+                
+                alert(`سيبدأ تحميل "${reportName}" بصيغة ${reportFormat}...`);
+            });
+        });
+
+        // حذف تقرير محفوظ
+        const deleteBtns = document.querySelectorAll('.report-actions .btn-icon:last-child');
+        deleteBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const reportCard = this.closest('.report-card');
+                const reportName = reportCard.querySelector('h4').textContent;
+                
+                if (confirm(`هل تريد حذف التقرير "${reportName}"؟`)) {
+                    if (confirm('هذا الإجراء لا يمكن التراجع عنه. هل أنت متأكد؟')) {
+                        reportCard.style.opacity = '0.5';
+                        setTimeout(() => {
+                            reportCard.remove();
+                        }, 300);
+                    }
+                }
+            });
+        });
+
+        // بحث في التقارير
+        const searchInput = document.querySelector('.search input');
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const reportCards = document.querySelectorAll('.report-card');
+            const templateCards = document.querySelectorAll('.template-card');
+            
+            // بحث في التقارير المحفوظة
+            reportCards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                card.style.display = text.includes(searchTerm) ? 'block' : 'none';
+            });
+            
+            // بحث في القوالب
+            templateCards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                card.style.display = text.includes(searchTerm) ? 'block' : 'none';
+            });
+        });
+    </script>
+</body>
+</html>

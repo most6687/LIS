@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الإحصائيات - نظام معلومات المختبر</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="statistics.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- الشريط الجانبي -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-flask"></i>
+                <h2>نظام المختبر LIS</h2>
+            </div>
+            <ul class="menu">
+                <li><a href="index.html"><i class="fas fa-tachometer-alt"></i> لوحة التحكم</a></li>
+                <li><a href="users.html"><i class="fas fa-users"></i> إدارة المستخدمين</a></li>
+                <li><a href="permissions.html"><i class="fas fa-user-shield"></i> إدارة الصلاحيات</a></li>
+                <li class="active"><a href="statistics.html"><i class="fas fa-chart-bar"></i> الإحصائيات</a></li>
+                <li><a href="audit.html"><i class="fas fa-history"></i> Audit Trail</a></li>
+                <li><a href="patients.html"><i class="fas fa-user-injured"></i> المرضى</a></li>
+                <li><a href="inventory.html"><i class="fas fa-boxes"></i> المخزون</a></li>
+                <li><a href="reports.html"><i class="fas fa-file-pdf"></i> التقارير</a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> الإعدادات</a></li>
+            </ul>
+            <div class="user-info">
+                <img src="https://ui-avatars.com/api/?name=مسؤول+النظام&background=0D8ABC&color=fff" alt="صورة المستخدم">
+                <div>
+                    <h4>مسؤول النظام</h4>
+                    <p>Admin</p>
+                </div>
+                <a href="logout.html" class="logout"><i class="fas fa-sign-out-alt"></i></a>
+            </div>
+        </aside>
+
+        <!-- المحتوى الرئيسي -->
+        <main class="main-content">
+            <!-- الشريط العلوي -->
+            <header class="topbar">
+                <div class="search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="ابحث في الإحصائيات...">
+                </div>
+                <div class="topbar-right">
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">5</span>
+                    </div>
+                    <div class="date-display">
+                        <i class="far fa-calendar-alt"></i>
+                        <span id="current-date">--/--/----</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- محتوى الإحصائيات -->
+            <section class="statistics-content">
+                <div class="page-header">
+                    <h1><i class="fas fa-chart-bar"></i> الإحصائيات والتقارير</h1>
+                    <p>عرض وتحليل أداء المختبر من خلال الرسوم البيانية والإحصائيات التفصيلية.</p>
+                </div>
+
+                <!-- أدوات التحكم والتصدير -->
+                <div class="stats-controls">
+                    <div class="date-range">
+                        <button class="btn btn-secondary active" data-range="today">اليوم</button>
+                        <button class="btn btn-secondary" data-range="week">الأسبوع</button>
+                        <button class="btn btn-secondary" data-range="month">الشهر</button>
+                        <button class="btn btn-secondary" data-range="quarter">ربع سنوي</button>
+                        <button class="btn btn-secondary" data-range="year">سنوي</button>
+                        <input type="date" id="custom-start" class="date-input">
+                        <span>إلى</span>
+                        <input type="date" id="custom-end" class="date-input">
+                        <button class="btn btn-primary" id="apply-date">
+                            <i class="fas fa-filter"></i> تطبيق
+                        </button>
+                    </div>
+                    <div class="export-options">
+                        <button class="btn btn-export" id="export-pdf">
+                            <i class="fas fa-file-pdf"></i> PDF
+                        </button>
+                        <button class="btn btn-export" id="export-excel">
+                            <i class="fas fa-file-excel"></i> Excel
+                        </button>
+                        <button class="btn btn-export" id="export-print">
+                            <i class="fas fa-print"></i> طباعة
+                        </button>
+                    </div>
+                </div>
+
+                <!-- الإحصائيات السريعة -->
+                <div class="quick-overview">
+                    <div class="overview-card">
+                        <div class="overview-icon" style="background-color: #4CAF50;">
+                            <i class="fas fa-vial"></i>
+                        </div>
+                        <div class="overview-content">
+                            <h3>١,٢٤٥</h3>
+                            <p>إجمالي الفحوصات</p>
+                            <span class="trend positive"><i class="fas fa-arrow-up"></i> ١٢٪ عن الشهر الماضي</span>
+                        </div>
+                    </div>
+                    <div class="overview-card">
+                        <div class="overview-icon" style="background-color: #2196F3;">
+                            <i class="fas fa-user-injured"></i>
+                        </div>
+                        <div class="overview-content">
+                            <h3>٨٧٦</h3>
+                            <p>مرضى جديد</p>
+                            <span class="trend positive"><i class="fas fa-arrow-up"></i> ٨٪ عن الشهر الماضي</span>
+                        </div>
+                    </div>
+                    <div class="overview-card">
+                        <div class="overview-icon" style="background-color: #FF9800;">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="overview-content">
+                            <h3>٨٥,٥٠٠ ج.م</h3>
+                            <p>إجمالي الإيرادات</p>
+                            <span class="trend positive"><i class="fas fa-arrow-up"></i> ١٥٪ عن الشهر الماضي</span>
+                        </div>
+                    </div>
+                    <div class="overview-card">
+                        <div class="overview-icon" style="background-color: #9C27B0;">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="overview-content">
+                            <h3>٢.٤ ساعة</h3>
+                            <p>متوسط وقت الفحص</p>
+                            <span class="trend negative"><i class="fas fa-arrow-down"></i> ٠.٣ ساعة عن الشهر الماضي</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- الرسوم البيانية الرئيسية -->
+                <div class="main-charts">
+                    <div class="chart-container large">
+                        <div class="chart-header">
+                            <h4><i class="fas fa-chart-line"></i> عدد الفحوصات شهرياً</h4>
+                            <select id="test-type-filter">
+                                <option value="all">جميع الفحوصات</option>
+                                <option value="blood">فحوصات الدم</option>
+                                <option value="urine">تحاليل البول</option>
+                                <option value="bio">الكيمياء الحيوية</option>
+                                <option value="hormone">الهرمونات</option>
+                            </select>
+                        </div>
+                        <canvas id="testsChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h4><i class="fas fa-chart-pie"></i> توزيع الفحوصات</h4>
+                        </div>
+                        <canvas id="distributionChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h4><i class="fas fa-chart-area"></i> الإيرادات الشهرية</h4>
+                        </div>
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- إحصائيات إضافية -->
+                <div class="additional-stats">
+                    <div class="stats-section">
+                        <div class="section-header">
+                            <h4><i class="fas fa-user-md"></i> أداء الأطباء</h4>
+                            <button class="btn btn-secondary btn-sm">عرض الكل</button>
+                        </div>
+                        <div class="doctors-performance">
+                            <div class="doctor-card">
+                                <div class="doctor-info">
+                                    <img src="https://ui-avatars.com/api/?name=د.+أحمد+محمد&background=3498db&color=fff" alt="د. أحمد">
+                                    <div>
+                                        <h5>د. أحمد محمد</h5>
+                                        <p>أمراض باطنة</p>
+                                    </div>
+                                </div>
+                                <div class="doctor-stats">
+                                    <div class="stat">
+                                        <span class="stat-value">٢٣٤</span>
+                                        <span class="stat-label">فحص</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-value">٩٨٪</span>
+                                        <span class="stat-label">دقة</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-value">٤.٧</span>
+                                        <span class="stat-label">تقييم</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="doctor-card">
+                                <div class="doctor-info">
+                                    <img src="https://ui-avatars.com/api/?name=د.+سارة+علي&background=2ecc71&color=fff" alt="د. سارة">
+                                    <div>
+                                        <h5>د. سارة علي</h5>
+                                        <p>غدد صماء</p>
+                                    </div>
+                                </div>
+                                <div class="doctor-stats">
+                                    <div class="stat">
+                                        <span class="stat-value">١٨٩</span>
+                                        <span class="stat-label">فحص</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-value">٩٦٪</span>
+                                        <span class="stat-label">دقة</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-value">٤.٨</span>
+                                        <span class="stat-label">تقييم</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="doctor-card">
+                                <div class="doctor-info">
+                                    <img src="https://ui-avatars.com/api/?name=د.+محمد+شريف&background=9b59b6&color=fff" alt="د. محمد">
+                                    <div>
+                                        <h5>د. محمد شريف</h5>
+                                        <p>أمراض دم</p>
+                                    </div>
+                                </div>
+                                <div class="doctor-stats">
+                                    <div class="stat">
+                                        <span class="stat-value">٣١٢</span>
+                                        <span class="stat-label">فحص</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-value">٩٩٪</span>
+                                        <span class="stat-label">دقة</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-value">٤.٩</span>
+                                        <span class="stat-label">تقييم</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats-section">
+                        <div class="section-header">
+                            <h4><i class="fas fa-vial"></i> أكثر الفحوصات طلباً</h4>
+                            <button class="btn btn-secondary btn-sm">عرض الكل</button>
+                        </div>
+                        <div class="popular-tests">
+                            <div class="test-item">
+                                <div class="test-name">
+                                    <div class="test-color" style="background-color: #3498db;"></div>
+                                    <span>صورة دم كاملة</span>
+                                </div>
+                                <div class="test-stats">
+                                    <span class="test-count">٣٤٥</span>
+                                    <div class="test-bar">
+                                        <div class="bar-fill" style="width: 85%;"></div>
+                                    </div>
+                                    <span class="test-percentage">٢٨٪</span>
+                                </div>
+                            </div>
+                            <div class="test-item">
+                                <div class="test-name">
+                                    <div class="test-color" style="background-color: #2ecc71;"></div>
+                                    <span>سكر الدم</span>
+                                </div>
+                                <div class="test-stats">
+                                    <span class="test-count">٢٨٩</span>
+                                    <div class="test-bar">
+                                        <div class="bar-fill" style="width: 70%;"></div>
+                                    </div>
+                                    <span class="test-percentage">٢٣٪</span>
+                                </div>
+                            </div>
+                            <div class="test-item">
+                                <div class="test-name">
+                                    <div class="test-color" style="background-color: #e74c3c;"></div>
+                                    <span>وظائف كبد</span>
+                                </div>
+                                <div class="test-stats">
+                                    <span class="test-count">٢٣٤</span>
+                                    <div class="test-bar">
+                                        <div class="bar-fill" style="width: 60%;"></div>
+                                    </div>
+                                    <span class="test-percentage">١٩٪</span>
+                                </div>
+                            </div>
+                            <div class="test-item">
+                                <div class="test-name">
+                                    <div class="test-color" style="background-color: #f39c12;"></div>
+                                    <span>كوليسترول</span>
+                                </div>
+                                <div class="test-stats">
+                                    <span class="test-count">١٨٩</span>
+                                    <div class="test-bar">
+                                        <div class="bar-fill" style="width: 50%;"></div>
+                                    </div>
+                                    <span class="test-percentage">١٥٪</span>
+                                </div>
+                            </div>
+                            <div class="test-item">
+                                <div class="test-name">
+                                    <div class="test-color" style="background-color: #9b59b6;"></div>
+                                    <span>هرمونات الغدة</span>
+                                </div>
+                                <div class="test-stats">
+                                    <span class="test-count">١٥٦</span>
+                                    <div class="test-bar">
+                                        <div class="bar-fill" style="width: 40%;"></div>
+                                    </div>
+                                    <span class="test-percentage">١٣٪</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- التقارير التفصيلية -->
+                <div class="detailed-reports">
+                    <div class="reports-header">
+                        <h4><i class="fas fa-file-alt"></i> التقارير التفصيلية</h4>
+                        <div class="reports-filter">
+                            <select id="report-type">
+                                <option value="daily">تقرير يومي</option>
+                                <option value="weekly">تقرير أسبوعي</option>
+                                <option value="monthly">تقرير شهري</option>
+                                <option value="yearly">تقرير سنوي</option>
+                            </select>
+                            <button class="btn btn-primary" id="generate-report">
+                                <i class="fas fa-download"></i> تحميل التقرير
+                            </button>
+                        </div>
+                    </div>
+                    <div class="reports-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>التاريخ</th>
+                                    <th>عدد المرضى</th>
+                                    <th>عدد الفحوصات</th>
+                                    <th>الإيرادات</th>
+                                    <th>متوسط وقت الفحص</th>
+                                    <th>معدل الرضا</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>١ مايو ٢٠٢٤</td>
+                                    <td>٤٥</td>
+                                    <td>٦٧</td>
+                                    <td>٥,٢٠٠ ج.م</td>
+                                    <td>٢.١ ساعة</td>
+                                    <td><span class="rating">٤.٨ ★</span></td>
+                                    <td>
+                                        <button class="btn-icon btn-view" title="عرض التفاصيل">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-icon btn-download" title="تحميل PDF">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>٣٠ أبريل ٢٠٢٤</td>
+                                    <td>٤٢</td>
+                                    <td>٦٣</td>
+                                    <td>٤,٩٥٠ ج.م</td>
+                                    <td>٢.٣ ساعة</td>
+                                    <td><span class="rating">٤.٧ ★</span></td>
+                                    <td>
+                                        <button class="btn-icon btn-view" title="عرض التفاصيل">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-icon btn-download" title="تحميل PDF">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>٢٩ أبريل ٢٠٢٤</td>
+                                    <td>٥٠</td>
+                                    <td>٧٨</td>
+                                    <td>٦,١٠٠ ج.م</td>
+                                    <td>٢.٤ ساعة</td>
+                                    <td><span class="rating">٤.٩ ★</span></td>
+                                    <td>
+                                        <button class="btn-icon btn-view" title="عرض التفاصيل">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-icon btn-download" title="تحميل PDF">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>٢٨ أبريل ٢٠٢٤</td>
+                                    <td>٣٨</td>
+                                    <td>٥٥</td>
+                                    <td>٤,٣٠٠ ج.م</td>
+                                    <td>٢.٥ ساعة</td>
+                                    <td><span class="rating">٤.٦ ★</span></td>
+                                    <td>
+                                        <button class="btn-icon btn-view" title="عرض التفاصيل">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-icon btn-download" title="تحميل PDF">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>٢٧ أبريل ٢٠٢٤</td>
+                                    <td>٤٧</td>
+                                    <td>٧١</td>
+                                    <td>٥,٦٠٠ ج.م</td>
+                                    <td>٢.٢ ساعة</td>
+                                    <td><span class="rating">٤.٨ ★</span></td>
+                                    <td>
+                                        <button class="btn-icon btn-view" title="عرض التفاصيل">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-icon btn-download" title="تحميل PDF">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="footer">
+                <p>© ٢٠٢٤ نظام معلومات المختبر (LIS) - مشروع تخرج - جميع الحقوق محفوظة</p>
+                <p>الإصدار ٢.١.٠ | آخر تحديث: ٢٥ أبريل ٢٠٢٤</p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- نافذة عرض التقرير التفصيلي -->
+    <div class="modal-overlay" id="report-modal">
+        <div class="modal modal-large">
+            <div class="modal-header">
+                <h3><i class="fas fa-chart-bar"></i> تقرير تفصيلي - ١ مايو ٢٠٢٤</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="report-details">
+                    <div class="report-summary">
+                        <div class="summary-item">
+                            <h5>إجمالي الإيرادات</h5>
+                            <p class="amount">٥,٢٠٠ ج.م</p>
+                        </div>
+                        <div class="summary-item">
+                            <h5>عدد الفحوصات</h5>
+                            <p class="count">٦٧</p>
+                        </div>
+                        <div class="summary-item">
+                            <h5>عدد المرضى</h5>
+                            <p class="count">٤٥</p>
+                        </div>
+                        <div class="summary-item">
+                            <h5>متوسط وقت الفحص</h5>
+                            <p class="time">٢.١ ساعة</p>
+                        </div>
+                    </div>
+                    
+                    <div class="report-chart">
+                        <canvas id="detailedChart"></canvas>
+                    </div>
+                    
+                    <div class="report-table">
+                        <h5>تفاصيل الفحوصات</h5>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>نوع الفحص</th>
+                                    <th>العدد</th>
+                                    <th>الإيراد</th>
+                                    <th>النسبة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>صورة دم كاملة</td>
+                                    <td>١٨</td>
+                                    <td>١,٨٠٠ ج.م</td>
+                                    <td>٣٤.٦٪</td>
+                                </tr>
+                                <tr>
+                                    <td>سكر الدم</td>
+                                    <td>١٥</td>
+                                    <td>١,٠٥٠ ج.م</td>
+                                    <td>٢٠.٢٪</td>
+                                </tr>
+                                <tr>
+                                    <td>وظائف كبد</td>
+                                    <td>١٢</td>
+                                    <td>٩٦٠ ج.م</td>
+                                    <td>١٨.٥٪</td>
+                                </tr>
+                                <tr>
+                                    <td>كوليسترول</td>
+                                    <td>١٠</td>
+                                    <td>٨٠٠ ج.م</td>
+                                    <td>١٥.٤٪</td>
+                                </tr>
+                                <tr>
+                                    <td>هرمونات</td>
+                                    <td>٧</td>
+                                    <td>٦٥٠ ج.م</td>
+                                    <td>١٢.٥٪</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="report-notes">
+                        <h5>ملاحظات</h5>
+                        <p>• زاد عدد فحوصات الدم الكاملة بنسبة ١٠٪ عن اليوم السابق.</p>
+                        <p>• انخفض متوسط وقت الفحص بمقدار ٠.٢ ساعة عن المتوسط الشهري.</p>
+                        <p>• تم تحقيق أعلى إيراد من فحوصات الدم الكاملة.</p>
+                    </div>
+                </div>
+                
+                <div class="report-actions">
+                    <button class="btn btn-secondary" id="print-report">
+                        <i class="fas fa-print"></i> طباعة التقرير
+                    </button>
+                    <button class="btn btn-primary" id="download-report">
+                        <i class="fas fa-download"></i> تحميل PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // عرض التاريخ الحالي
+        const now = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-date').textContent = now.toLocaleDateString('ar-EG', options);
+
+        // تهيئة التواريخ في أدوات الفلترة
+        const today = new Date();
+        const weekAgo = new Date();
+        weekAgo.setDate(today.getDate() - 7);
+        
+        document.getElementById('custom-start').valueAsDate = weekAgo;
+        document.getElementById('custom-end').valueAsDate = today;
+
+        // تفعيل أزرار نطاق التاريخ
+        const dateButtons = document.querySelectorAll('.date-range .btn-secondary');
+        dateButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                dateButtons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const range = this.getAttribute('data-range');
+                updateCharts(range);
+            });
+        });
+
+        // تطبيق التاريخ المخصص
+        document.getElementById('apply-date').addEventListener('click', function() {
+            const startDate = document.getElementById('custom-start').value;
+            const endDate = document.getElementById('custom-end').value;
+            
+            if (startDate && endDate) {
+                dateButtons.forEach(b => b.classList.remove('active'));
+                updateCharts('custom', { start: startDate, end: endDate });
+            } else {
+                alert('يرجى اختيار تاريخ البدء والانتهاء');
+            }
+        });
+
+        // الرسوم البيانية
+        let testsChart, distributionChart, revenueChart, detailedChart;
+
+        // رسم بياني لعدد الفحوصات
+        function initTestsChart() {
+            const ctx = document.getElementById('testsChart').getContext('2d');
+            testsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+                    datasets: [{
+                        label: 'عدد الفحوصات',
+                        data: [120, 190, 180, 210, 245, 300, 280, 320, 290, 310, 280, 330],
+                        borderColor: '#3498db',
+                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            rtl: true,
+                            labels: {
+                                font: {
+                                    family: 'Cairo'
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                font: {
+                                    family: 'Cairo'
+                                }
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                font: {
+                                    family: 'Cairo'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // رسم بياني توزيع الفحوصات
+        function initDistributionChart() {
+            const ctx = document.getElementById('distributionChart').getContext('2d');
+            distributionChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['فحوصات الدم', 'تحاليل البول', 'الكيمياء الحيوية', 'الهرمونات', 'أخرى'],
+                    datasets: [{
+                        data: [35, 20, 25, 15, 5],
+                        backgroundColor: [
+                            '#3498db',
+                            '#2ecc71',
+                            '#e74c3c',
+                            '#f39c12',
+                            '#9b59b6'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'left',
+                            rtl: true,
+                            labels: {
+                                font: {
+                                    family: 'Cairo'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // رسم بياني الإيرادات
+        function initRevenueChart() {
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+            revenueChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو'],
+                    datasets: [{
+                        label: 'الإيرادات (ألف ج.م)',
+                        data: [45, 52, 48, 61, 68, 72],
+                        backgroundColor: 'rgba(46, 204, 113, 0.7)',
+                        borderColor: '#27ae60',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            rtl: true,
+                            labels: {
+                                font: {
+                                    family: 'Cairo'
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                font: {
+                                    family: 'Cairo'
+                                },
+                                callback: function(value) {
+                                    return value + 'K';
+                                }
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                font: {
+                                    family: 'Cairo'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // فلترة حسب نوع الفحص
+        document.getElementById('test-type-filter').addEventListener('change', function() {
+            const testType = this.value;
+            updateTestsChartByType(testType);
+        });
+
+        function updateTestsChartByType(type) {
+            // هنا يتم تحديث البيانات حسب نوع الفحص
+            console.log('تحديث الرسم البياني حسب نوع الفحص:', type);
+        }
+
+        function updateCharts(range, customDates = null) {
+            console.log('تحديث الرسوم البيانية للنطاق:', range, customDates);
+            // هنا يمكنك إضافة منطق تحديث البيانات حسب النطاق الزمني
+        }
+
+        // تصدير التقارير
+        document.getElementById('export-pdf').addEventListener('click', function() {
+            alert('سيتم تصدير التقرير بصيغة PDF...');
+        });
+
+        document.getElementById('export-excel').addEventListener('click', function() {
+            alert('سيتم تصدير التقرير بصيغة Excel...');
+        });
+
+        document.getElementById('export-print').addEventListener('click', function() {
+            window.print();
+        });
+
+        // عرض التقرير التفصيلي
+        const viewButtons = document.querySelectorAll('.btn-view');
+        const reportModal = document.getElementById('report-modal');
+        const closeModalBtns = document.querySelectorAll('.close-modal');
+
+        viewButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                reportModal.style.display = 'flex';
+                initDetailedChart();
+            });
+        });
+
+        closeModalBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                reportModal.style.display = 'none';
+            });
+        });
+
+        reportModal.addEventListener('click', (e) => {
+            if (e.target === reportModal) {
+                reportModal.style.display = 'none';
+            }
+        });
+
+        // رسم بياني تفصيلي
+        function initDetailedChart() {
+            if (detailedChart) {
+                detailedChart.destroy();
+            }
+            
+            const ctx = document.getElementById('detailedChart').getContext('2d');
+            detailedChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['صباحاً', 'ظهراً', 'مساءً'],
+                    datasets: [{
+                        label: 'فحوصات الدم',
+                        data: [8, 6, 4],
+                        backgroundColor: '#3498db'
+                    }, {
+                        label: 'تحاليل البول',
+                        data: [5, 4, 3],
+                        backgroundColor: '#2ecc71'
+                    }, {
+                        label: 'كيمياء حيوية',
+                        data: [4, 5, 3],
+                        backgroundColor: '#e74c3c'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            rtl: true,
+                            labels: {
+                                font: {
+                                    family: 'Cairo'
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                font: {
+                                    family: 'Cairo'
+                                }
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                font: {
+                                    family: 'Cairo'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // تحميل التقرير
+        document.getElementById('generate-report').addEventListener('click', function() {
+            const reportType = document.getElementById('report-type').value;
+            alert(`سيتم تحميل ${reportType}...`);
+        });
+
+        // تهيئة الرسوم البيانية عند التحميل
+        window.addEventListener('DOMContentLoaded', function() {
+            initTestsChart();
+            initDistributionChart();
+            initRevenueChart();
+        });
+    </script>
+</body>
+</html>

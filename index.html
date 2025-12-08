@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم - نظام معلومات المختبر</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- الشريط الجانبي -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-flask"></i>
+                <h2>نظام المختبر LIS</h2>
+            </div>
+            <ul class="menu">
+                <li class="active"><a href="#"><i class="fas fa-tachometer-alt"></i> لوحة التحكم</a></li>
+                <li><a href="users.html"><i class="fas fa-users"></i> إدارة المستخدمين</a></li>
+                <li><a href="statistics.html"><i class="fas fa-chart-bar"></i> الإحصائيات</a></li>
+                <li><a href="permissions.html"><i class="fas fa-user-shield"></i> إدارة الصلاحيات</a></li>
+                <li><a href="audit.html"><i class="fas fa-history"></i> Audit Trail</a></li>
+                <li><a href="inventory.html"><i class="fas fa-boxes"></i> المخزون</a></li>
+                <li><a href="reports.html"><i class="fas fa-file-pdf"></i> التقارير</a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> الإعدادات</a></li>
+            </ul>
+            <div class="user-info">
+                <img src="https://ui-avatars.com/api/?name=مسؤول+النظام&background=0D8ABC&color=fff" alt="صورة المستخدم">
+                <div>
+                    <h4>مسؤول النظام</h4>
+                    <p>Admin</p>
+                </div>
+                <a href="login.html" class="logout"><i class="fas fa-sign-out-alt"></i></a>
+            </div>
+        </aside>
+
+        <!-- المحتوى الرئيسي -->
+        <main class="main-content">
+            <!-- الشريط العلوي -->
+            <header class="topbar">
+                <div class="search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="ابحث عن مريض، فحص، مستخدم...">
+                </div>
+                <div class="topbar-right">
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                    <div class="date-display">
+                        <i class="far fa-calendar-alt"></i>
+                        <span id="current-date">--/--/----</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- الإحصائيات السريعة -->
+            <section class="quick-stats">
+                <h1><i class="fas fa-tachometer-alt"></i> لوحة التحكم</h1>
+                <p>مرحباً بك، مسؤول النظام. هنا نظرة سريعة على أداء المختبر.</p>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: #4CAF50;">
+                            <i class="fas fa-user-injured"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>٢٤٥</h3>
+                            <p>مريض جديد اليوم</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: #2196F3;">
+                            <i class="fas fa-vial"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>٣٨٧</h3>
+                            <p>فحص قيد التنفيذ</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: #FF9800;">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>١٨</h3>
+                            <p>مستخدم نشط</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: #F44336;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>٧</h3>
+                            <p>تنبيهات المخزون</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- الأقسام الرئيسية -->
+            <section class="main-sections">
+                <div class="section-left">
+                    <div class="card">
+                        <h3><i class="fas fa-chart-line"></i> نشاط الفحوصات</h3>
+                        <div class="chart-placeholder">
+                            <p>رسم بياني يظهر عدد الفحوصات خلال الأسبوع</p>
+                            <div class="fake-chart">
+                                <div class="bar" style="height: 70%;"></div>
+                                <div class="bar" style="height: 90%;"></div>
+                                <div class="bar" style="height: 50%;"></div>
+                                <div class="bar" style="height: 80%;"></div>
+                                <div class="bar" style="height: 60%;"></div>
+                                <div class="bar" style="height: 95%;"></div>
+                                <div class="bar" style="height: 75%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3><i class="fas fa-bell"></i> التنبيهات الحديثة</h3>
+                        <ul class="alerts-list">
+                            <li>
+                                <i class="fas fa-box text-warning"></i>
+                                <span>مخزون شرائط السكر على وشك النفاد</span>
+                                <span class="time">منذ ساعتين</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-user-plus text-success"></i>
+                                <span>مستخدم جديد تمت إضافته (محمد علي)</span>
+                                <span class="time">منذ ٤ ساعات</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-vial text-danger"></i>
+                                <span>عينة #٤٥٦٢٧ معلقة - تحتاج مراجعة</span>
+                                <span class="time">منذ ٦ ساعات</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-file-invoice text-info"></i>
+                                <span>فاتورة #٣٣٠١ تم دفعها بالكامل</span>
+                                <span class="time">منذ يوم</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="section-right">
+                    <div class="card">
+                        <h3><i class="fas fa-history"></i> آخر النشاطات</h3>
+                        <ul class="activity-list">
+                            <li>
+                                <div class="activity-icon">
+                                    <i class="fas fa-user-edit"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <p>تم تعديل صلاحيات المستخدم "فني المختبر"</p>
+                                    <span class="activity-time">منذ ٣٠ دقيقة</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="activity-icon">
+                                    <i class="fas fa-file-upload"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <p>تم رفع نتائج ٢٥ فحص من قسم الكيمياء</p>
+                                    <span class="activity-time">منذ ساعة</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="activity-icon">
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <p>تم تسجيل ١٥ مريض جديد من قبل الاستقبال</p>
+                                    <span class="activity-time">منذ ساعتين</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="activity-icon">
+                                    <i class="fas fa-print"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <p>تم إنشاء تقرير شهري لفحوصات الدم</p>
+                                    <span class="activity-time">منذ ٣ ساعات</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3><i class="fas fa-link"></i> روابط سريعة</h3>
+                        <div class="quick-links">
+                            <a href="add-user.html" class="quick-link">
+                                <i class="fas fa-user-plus"></i>
+                                <span>إضافة مستخدم</span>
+                            </a>
+                            <a href="generate-report.html" class="quick-link">
+                                <i class="fas fa-file-pdf"></i>
+                                <span>تقرير PDF</span>
+                            </a>
+                            <a href="inventory-alerts.html" class="quick-link">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span>تنبيهات المخزون</span>
+                            </a>
+                            <a href="audit.html" class="quick-link">
+                                <i class="fas fa-history"></i>
+                                <span>Audit Trail</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="footer">
+                <p>© ٢٠٢٤ نظام معلومات المختبر (LIS) - مشروع تخرج - جميع الحقوق محفوظة</p>
+                <p>الإصدار ٢.١.٠ | آخر تحديث: ٢٥ أبريل ٢٠٢٤</p>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        // عرض التاريخ الحالي
+        const now = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-date').textContent = now.toLocaleDateString('ar-EG', options);
+
+        // تفعيل العناصر النشطة في القائمة
+        document.querySelectorAll('.menu li').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.menu li').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

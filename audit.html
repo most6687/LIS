@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Trail - نظام معلومات المختبر</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="audit.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- الشريط الجانبي -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-flask"></i>
+                <h2>نظام المختبر LIS</h2>
+            </div>
+            <ul class="menu">
+                <li><a href="index.html"><i class="fas fa-tachometer-alt"></i> لوحة التحكم</a></li>
+                <li><a href="users.html"><i class="fas fa-users"></i> إدارة المستخدمين</a></li>
+                <li><a href="permissions.html"><i class="fas fa-user-shield"></i> إدارة الصلاحيات</a></li>
+                <li><a href="statistics.html"><i class="fas fa-chart-bar"></i> الإحصائيات</a></li>
+                <li class="active"><a href="audit.html"><i class="fas fa-history"></i> Audit Trail</a></li>
+                <li><a href="inventory.html"><i class="fas fa-boxes"></i> المخزون</a></li>
+                <li><a href="reports.html"><i class="fas fa-file-pdf"></i> التقارير</a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> الإعدادات</a></li>
+            </ul>
+            <div class="user-info">
+                <img src="https://ui-avatars.com/api/?name=مسؤول+النظام&background=0D8ABC&color=fff" alt="صورة المستخدم">
+                <div>
+                    <h4>مسؤول النظام</h4>
+                    <p>Admin</p>
+                </div>
+                <a href="logout.html" class="logout"><i class="fas fa-sign-out-alt"></i></a>
+            </div>
+        </aside>
+
+        <!-- المحتوى الرئيسي -->
+        <main class="main-content">
+            <!-- الشريط العلوي -->
+            <header class="topbar">
+                <div class="search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="ابحث في سجل الأنشطة...">
+                </div>
+                <div class="topbar-right">
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">7</span>
+                    </div>
+                    <div class="date-display">
+                        <i class="far fa-calendar-alt"></i>
+                        <span id="current-date">--/--/----</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- محتوى Audit Trail -->
+            <section class="audit-content">
+                <div class="page-header">
+                    <h1><i class="fas fa-history"></i> Audit Trail</h1>
+                    <p>سجل كامل لجميع الأنشطة والتغييرات التي تحدث في النظام. يمكنك البحث والفلترة حسب النشاط أو المستخدم أو التاريخ.</p>
+                </div>
+
+                <!-- أدوات التحكم -->
+                <div class="audit-controls">
+                    <div class="filters-section">
+                        <div class="filter-group">
+                            <label><i class="fas fa-user"></i> المستخدم</label>
+                            <select id="user-filter">
+                                <option value="">جميع المستخدمين</option>
+                                <option value="admin">مسؤول النظام</option>
+                                <option value="ahmed">أحمد محمد</option>
+                                <option value="sara">سارة علي</option>
+                                <option value="khaled">خالد فكري</option>
+                                <option value="fatma">فاطمة رضا</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label><i class="fas fa-tasks"></i> نوع النشاط</label>
+                            <select id="action-filter">
+                                <option value="">جميع الأنشطة</option>
+                                <option value="login">تسجيل الدخول</option>
+                                <option value="user">إدارة المستخدمين</option>
+                                <option value="patient">إدارة المرضى</option>
+                                <option value="test">إدارة الفحوصات</option>
+                                <option value="inventory">إدارة المخزون</option>
+                                <option value="billing">الفواتير</option>
+                                <option value="permission">الصلاحيات</option>
+                                <option value="delete">حذف</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label><i class="fas fa-calendar"></i> التاريخ من</label>
+                            <input type="date" id="date-from">
+                        </div>
+                        <div class="filter-group">
+                            <label><i class="fas fa-calendar"></i> التاريخ إلى</label>
+                            <input type="date" id="date-to">
+                        </div>
+                        <button class="btn btn-primary" id="apply-filters">
+                            <i class="fas fa-filter"></i> تطبيق الفلترة
+                        </button>
+                        <button class="btn btn-secondary" id="reset-filters">
+                            <i class="fas fa-redo"></i> إعادة التعيين
+                        </button>
+                    </div>
+                    
+                    <div class="actions-section">
+                        <button class="btn btn-export" id="export-audit">
+                            <i class="fas fa-file-export"></i> تصدير
+                        </button>
+                        <button class="btn btn-danger" id="clear-audit">
+                            <i class="fas fa-trash"></i> مسح السجل
+                        </button>
+                    </div>
+                </div>
+
+                <!-- إحصائيات سريعة -->
+                <div class="audit-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: #3498db;">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>٢,٤٥٦</h3>
+                            <p>إجمالي الأنشطة</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: #2ecc71;">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>٤٢</h3>
+                            <p>مستخدم نشط</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: #e74c3c;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>١٨</h3>
+                            <p>أنشطة مشبوهة</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background-color: #f39c12;">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>٥٦</h3>
+                            <p>أنشطة اليوم</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- جدول سجل الأنشطة -->
+                <div class="audit-table-container">
+                    <div class="table-header">
+                        <h4><i class="fas fa-list"></i> سجل الأنشطة</h4>
+                        <div class="table-actions">
+                            <div class="pagination-info">
+                                عرض <span id="start-row">١</span> - <span id="end-row">٢٠</span> من <span id="total-rows">٢,٤٥٦</span>
+                            </div>
+                            <div class="pagination-controls">
+                                <button class="btn-pagination" id="prev-page" disabled>
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                                <span class="page-number" id="current-page">١</span>
+                                <button class="btn-pagination" id="next-page">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="table-wrapper">
+                        <table class="audit-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>التاريخ والوقت</th>
+                                    <th>المستخدم</th>
+                                    <th>نوع النشاط</th>
+                                    <th>التفاصيل</th>
+                                    <th>عنوان IP</th>
+                                    <th>المتصفح</th>
+                                    <th>الحالة</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- نشاط 1 -->
+                                <tr>
+                                    <td><span class="log-id">#٠٠١</span></td>
+                                    <td>
+                                        <div class="timestamp">
+                                            <div class="date">٢٠٢٤-٠٥-٠١</div>
+                                            <div class="time">١٤:٣٠:٢٢</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="user-cell">
+                                            <img src="https://ui-avatars.com/api/?name=أحمد+محمد&background=3498db&color=fff" alt="أحمد محمد">
+                                            <div>
+                                                <strong>أحمد محمد</strong>
+                                                <small>مسؤول النظام</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="activity-badge badge-user">
+                                            <i class="fas fa-user-plus"></i> إضافة مستخدم
+                                        </span>
+                                    </td>
+                                    <td class="details-cell">
+                                        <div class="details-content">
+                                            <strong>إضافة مستخدم جديد:</strong> تم إضافة المستخدم "محمد شريف" كـ "طبيب" في النظام.
+                                            <button class="btn-show-details" data-id="1">عرض التفاصيل</button>
+                                        </div>
+                                    </td>
+                                    <td>١٩٢.١٦٨.١.١٠٠</td>
+                                    <td>Chrome ١٢٣</td>
+                                    <td>
+                                        <span class="status-badge status-success">
+                                            <i class="fas fa-check-circle"></i> ناجح
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button class="btn-icon btn-view" title="عرض التفاصيل الكاملة">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-icon btn-export-log" title="تصدير السجل">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                
+                                <!-- نشاط 2 -->
+                                <tr>
+                                    <td><span class="log-id">#٠٠٢</span></td>
+                                    <td>
+                                        <div class="timestamp">
+                                            <div class="date">٢٠٢٤-٠٥-٠١</div>
+                                            <div class="time">١٣:١٥:٤٥</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="user-cell">
+                                            <img src="https://ui-avatars.com/api/?name=سارة+علي&background=2ecc71&color=fff" alt="سارة علي">
+                                            <div>
+                                                <strong>سارة علي</strong>
+                                                <small>موظف استقبال</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="activity-badge badge-patient">
+                                            <i class="fas fa-user-injured"></i> إضافة مريض
+                                        </span>
+                                    </td>
+                                    <td class="details-cell">
+                                        <div class="details-content">
+                                            <strong>تسجيل مريض جديد:</strong> تم تسجيل المريض "علي حسن" برقم ملف ٤٥٦٢٣.
+                                            <button class="btn-show-details" data-id="2">عرض التفاصيل</button>
+                                        </div>
+                                    </td>
+                                    <td>١٩٢.١٦٨.١.١٠١</td>
+                                    <td>Firefox ١٢٢</td>
+                                    <td>
+                                        <span class="status-badge status-success">
+                                            <i class="fas fa-check-circle"></i> ناجح
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button class="btn-icon btn-view" title="عرض التفاصيل الكاملة">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-icon btn-export-log" title="تصدير السجل">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                
+                                <!-- نشاط 3 -->
+                                <tr>
+                                    <td><span class="log-id">#٠٠٣</span></td>
+                                    <td>
+                                        <div class="timestamp">
+                                            <div class="date">٢٠٢٤-٠٥-٠١</div>
+                                            <div class="time">١١:٠٥:٣٣</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="user-cell">
+                                            <img src="https://ui-avatars.com/api/?name=خالد+فكري&background=e74c3c&color=fff" alt="خالد فكري">
+                                            <div>
+                                                <strong>خالد فكري</strong>
+                                                <small>فني مختبر</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="activity-badge badge-test">
+                                            <i class="fas fa-vial"></i> إدخال نتائج
+                                        </span>
+                                    </td>
+                                    <td class="details-cell">
+                                        <div class="details-content">
+                                            <strong>إدخال نتائج فحص:</strong> تم إدخال نتائج فحص الدم للمريض رقم ٤٥٦٢٣.
+                                            <button class="btn-show-details" data-id="3">عرض التفاصيل</button>
+                                        </div>
+                                    </td>
+                                    <td>١٩٢.١٦٨.١.١٠٢</td>
+                                    <td>Edge ١٢٣</td>
+                                    <td>
+                                        <span class="status-badge status-success">
+                                            <i class="fas fa-check-circle"></i> ناجح
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button class="btn-icon btn-view" title="عرض التفاصيل الكاملة">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-icon btn-export-log" title="تصدير السجل">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                
+                                <!-- نشاط 4 -->
+                                <tr>
+                                    <td><span class="log-id">#٠٠٤</span></td>
+                                    <td>
+                                        <div class="timestamp">
+                                            <div class="date">٢٠٢٤-٠٥-٠١</div>
+                                            <div class="time">١٠:٢٠:١٨</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="user-cell">
+                                            <img src="https://ui-avatars.com/api/?name=فاطمة+رضا&background=f39c12&color=fff" alt="فاطمة رضا">
+                                            <div>
+                                                <strong>فاطمة رضا</strong>
+                                                <small>موظف فواتير</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="activity-badge badge-billing">
+                                            <i class="fas fa-file-invoice-dollar"></i> إنشاء فاتورة
+                                        </span>
+                                    </td>
+                                    <td class="details-cell">
+                                        <div class="details-content">
+                                            <strong>إنشاء فاتورة جديدة:</strong> تم إنشاء فاتورة رقم ٣٣٠١ للمريض "علي حسن" بمبلغ ٥٥٠ ج.م.
+                                            <button class="btn-show-details" data-id="4">عرض التفاصيل</button>
+                                        </div>
+                                    </td>
+                                    <td>١٩٢.١٦٨.١.١٠٣</td>
+                                    <td>Safari ١٧</td>
+                                    <td>
+                                        <span class="status-badge status-success">
+                                            <i class="fas fa-check-circle"></i> ناجح
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button class="btn-icon btn-view" title="عرض التفاصيل الكاملة">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-icon btn-export-log" title="تصدير السجل">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                
+                                <!-- نشاط 5 - نشاط مشبوه -->
+                                <tr class="suspicious">
+                                    <td><span class="log-id">#٠٠٥</span></td>
+                                    <td>
+                                        <div class="timestamp">
+                                            <div class="date">٢٠٢٤-٠٤-٣٠</div>
+                                            <div class="time">٢٣:٤٥:١٢</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="user-cell">
+                                            <img src="https://ui-avatars.com/api/?name=مجهول&background=95a5a6&color=fff" alt="مجهول">
+                                            <div>
+                                                <strong>مجهول</strong>
+                                                <small>IP غير معروف</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="activity-badge badge-danger">
+                                            <i class="fas fa-exclamation-triangle"></i> محاولة دخول
+                                        </span>
+                                    </td>
+                                    <td class="details-cell">
+                                        <div class="details-content">
+                                            <strong>محاولة دخول فاشلة:</strong> ٥ محاولات فاشلة لتسجيل الدخول لحساب "مسؤول النظام" من IP خارجي.
+                                            <button class="btn-show-details" data-id="5">عرض التفاصيل</button>
+                                        </div>
+                                    </td>
+                                    <td>٢٠٣.٠.١١٣.٥٤</td>
+                                    <td>غير معروف</td>
+                                    <td>
+                                        <span class="status-badge status-failed">
+                                            <i class="fas fa-times-circle"></i> فشل
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button class="btn-icon btn-view" title="عرض التفاصيل الكاملة">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-icon btn-alert" title="الإبلاغ">
+                                            <i class="fas fa-flag"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                
+                                <!-- نشاط 6 -->
+                                <tr>
+                                    <td><span class="log-id">#٠٠٦</span></td>
+                                    <td>
+                                        <div class="timestamp">
+                                            <div class="date">٢٠٢٤-٠٤-٣٠</div>
+                                            <div class="time">١٨:٣٠:٠٥</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="user-cell">
+                                            <img src="https://ui-avatars.com/api/?name=أحمد+محمد&background=3498db&color=fff" alt="أحمد محمد">
+                                            <div>
+                                                <strong>أحمد محمد</strong>
+                                                <small>مسؤول النظام</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="activity-badge badge-permission">
+                                            <i class="fas fa-user-shield"></i> تعديل صلاحيات
+                                        </span>
+                                    </td>
+                                    <td class="details-cell">
+                                        <div class="details-content">
+                                            <strong>تعديل صلاحيات المستخدم:</strong> تم تحديث صلاحيات دور "فني المختبر" - إضافة صلاحية "تعديل النتائج".
+                                            <button class="btn-show-details" data-id="6">عرض التفاصيل</button>
+                                        </div>
+                                    </td>
+                                    <td>١٩٢.١٦٨.١.١٠٠</td>
+                                    <td>Chrome ١٢٣</td>
+                                    <td>
+                                        <span class="status-badge status-success">
+                                            <i class="fas fa-check-circle"></i> ناجح
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button class="btn-icon btn-view" title="عرض التفاصيل الكاملة">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-icon btn-export-log" title="تصدير السجل">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                
+                                <!-- نشاط 7 -->
+                                <tr>
+                                    <td><span class="log-id">#٠٠٧</span></td>
+                                    <td>
+                                        <div class="timestamp">
+                                            <div class="date">٢٠٢٤-٠٤-٣٠</div>
+                                            <div class="time">١٦:١٥:٢٢</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="user-cell">
+                                            <img src="https://ui-avatars.com/api/?name=ياسر+حسين&background=1abc9c&color=fff" alt="ياسر حسين">
+                                            <div>
+                                                <strong>ياسر حسين</strong>
+                                                <small>مدير مخزون</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="activity-badge badge-inventory">
+                                            <i class="fas fa-boxes"></i> تحديث المخزون
+                                        </span>
+                                    </td>
+                                    <td class="details-cell">
+                                        <div class="details-content">
+                                            <strong>تحديث المخزون:</strong> تم خصم ٢٠ وحدة من "شرائط السكر" بعد استخدامها في الفحوصات.
+                                            <button class="btn-show-details" data-id="7">عرض التفاصيل</button>
+                                        </div>
+                                    </td>
+                                    <td>١٩٢.١٦٨.١.١٠٤</td>
+                                    <td>Chrome ١٢٢</td>
+                                    <td>
+                                        <span class="status-badge status-success">
+                                            <i class="fas fa-check-circle"></i> ناجح
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button class="btn-icon btn-view" title="عرض التفاصيل الكاملة">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-icon btn-export-log" title="تصدير السجل">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                
+                                <!-- نشاط 8 -->
+                                <tr>
+                                    <td><span class="log-id">#٠٠٨</span></td>
+                                    <td>
+                                        <div class="timestamp">
+                                            <div class="date">٢٠٢٤-٠٤-٣٠</div>
+                                            <div class="time">١٤:٤٠:٣٣</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="user-cell">
+                                            <img src="https://ui-avatars.com/api/?name=محمد+شريف&background=9b59b6&color=fff" alt="محمد شريف">
+                                            <div>
+                                                <strong>محمد شريف</strong>
+                                                <small>طبيب</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="activity-badge badge-test">
+                                            <i class="fas fa-vial"></i> طلب فحص
+                                        </span>
+                                    </td>
+                                    <td class="details-cell">
+                                        <div class="details-content">
+                                            <strong>طلب فحص جديد:</strong> تم طلب فحص "صورة دم كاملة" للمريض "سعاد محمد".
+                                            <button class="btn-show-details" data-id="8">عرض التفاصيل</button>
+                                        </div>
+                                    </td>
+                                    <td>١٩٢.١٦٨.١.١٠٥</td>
+                                    <td>Firefox ١٢١</td>
+                                    <td>
+                                        <span class="status-badge status-success">
+                                            <i class="fas fa-check-circle"></i> ناجح
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button class="btn-icon btn-view" title="عرض التفاصيل الكاملة">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-icon btn-export-log" title="تصدير السجل">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- إحصائيات التوزيع -->
+                <div class="distribution-section">
+                    <div class="distribution-card">
+                        <h5><i class="fas fa-chart-pie"></i> توزيع الأنشطة</h5>
+                        <div class="distribution-chart">
+                            <div class="chart-item">
+                                <div class="chart-color" style="background-color: #3498db;"></div>
+                                <span>إدارة المستخدمين</span>
+                                <span class="chart-percentage">٢٥٪</span>
+                            </div>
+                            <div class="chart-item">
+                                <div class="chart-color" style="background-color: #2ecc71;"></div>
+                                <span>إدارة المرضى</span>
+                                <span class="chart-percentage">٢٠٪</span>
+                            </div>
+                            <div class="chart-item">
+                                <div class="chart-color" style="background-color: #e74c3c;"></div>
+                                <span>الفحوصات</span>
+                                <span class="chart-percentage">١٨٪</span>
+                            </div>
+                            <div class="chart-item">
+                                <div class="chart-color" style="background-color: #f39c12;"></div>
+                                <span>الفواتير</span>
+                                <span class="chart-percentage">١٥٪</span>
+                            </div>
+                            <div class="chart-item">
+                                <div class="chart-color" style="background-color: #9b59b6;"></div>
+                                <span>المخزون</span>
+                                <span class="chart-percentage">١٢٪</span>
+                            </div>
+                            <div class="chart-item">
+                                <div class="chart-color" style="background-color: #34495e;"></div>
+                                <span>أخرى</span>
+                                <span class="chart-percentage">١٠٪</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="distribution-card">
+                        <h5><i class="fas fa-user-clock"></i> أكثر المستخدمين نشاطاً</h5>
+                        <div class="active-users">
+                            <div class="user-rank">
+                                <span class="rank-number">١</span>
+                                <img src="https://ui-avatars.com/api/?name=أحمد+محمد&background=3498db&color=fff" alt="أحمد محمد">
+                                <div class="user-info">
+                                    <strong>أحمد محمد</strong>
+                                    <small>مسؤول النظام</small>
+                                </div>
+                                <span class="activity-count">١٤٥ نشاط</span>
+                            </div>
+                            <div class="user-rank">
+                                <span class="rank-number">٢</span>
+                                <img src="https://ui-avatars.com/api/?name=سارة+علي&background=2ecc71&color=fff" alt="سارة علي">
+                                <div class="user-info">
+                                    <strong>سارة علي</strong>
+                                    <small>موظف استقبال</small>
+                                </div>
+                                <span class="activity-count">١٢٣ نشاط</span>
+                            </div>
+                            <div class="user-rank">
+                                <span class="rank-number">٣</span>
+                                <img src="https://ui-avatars.com/api/?name=خالد+فكري&background=e74c3c&color=fff" alt="خالد فكري">
+                                <div class="user-info">
+                                    <strong>خالد فكري</strong>
+                                    <small>فني مختبر</small>
+                                </div>
+                                <span class="activity-count">١٠٨ نشاط</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="footer">
+                <p>© ٢٠٢٤ نظام معلومات المختبر (LIS) - مشروع تخرج - جميع الحقوق محفوظة</p>
+                <p>الإصدار ٢.١.٠ | آخر تحديث: ٢٥ أبريل ٢٠٢٤</p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- نافذة عرض تفاصيل النشاط -->
+    <div class="modal-overlay" id="details-modal">
+        <div class="modal modal-large">
+            <div class="modal-header">
+                <h3><i class="fas fa-info-circle"></i> تفاصيل النشاط #<span id="activity-id">٠٠١</span></h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="activity-details">
+                    <div class="detail-section">
+                        <h5><i class="fas fa-info"></i> معلومات عامة</h5>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <span class="detail-label">معرف النشاط:</span>
+                                <span class="detail-value" id="detail-id">#٠٠١</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">التاريخ والوقت:</span>
+                                <span class="detail-value" id="detail-timestamp">٢٠٢٤-٠٥-٠١ ١٤:٣٠:٢٢</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">نوع النشاط:</span>
+                                <span class="detail-value" id="detail-type">إضافة مستخدم</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">الحالة:</span>
+                                <span class="detail-value" id="detail-status">ناجح</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h5><i class="fas fa-user"></i> معلومات المستخدم</h5>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <span class="detail-label">المستخدم:</span>
+                                <div class="user-detail" id="detail-user">
+                                    <img src="https://ui-avatars.com/api/?name=أحمد+محمد&background=3498db&color=fff" alt="أحمد محمد">
+                                    <div>
+                                        <strong>أحمد محمد</strong>
+                                        <small>مسؤول النظام</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">عنوان IP:</span>
+                                <span class="detail-value" id="detail-ip">١٩٢.١٦٨.١.١٠٠</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">المتصفح:</span>
+                                <span class="detail-value" id="detail-browser">Chrome ١٢٣</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">نظام التشغيل:</span>
+                                <span class="detail-value" id="detail-os">Windows ١٠</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h5><i class="fas fa-file-alt"></i> تفاصيل النشاط</h5>
+                        <div class="activity-content" id="detail-content">
+                            <p><strong>الإجراء:</strong> إضافة مستخدم جديد</p>
+                            <p><strong>التفاصيل:</strong> تم إضافة المستخدم "محمد شريف" كـ "طبيب" في النظام.</p>
+                            <p><strong>البيانات المضافة:</strong></p>
+                            <pre class="data-json">{
+  "name": "محمد شريف",
+  "email": "mohamed.shareef@lab.com",
+  "role": "doctor",
+  "status": "active",
+  "created_at": "2024-05-01 14:30:22"
+}</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h5><i class="fas fa-shield-alt"></i> معلومات الأمان</h5>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <span class="detail-label">مستوى الخطورة:</span>
+                                <span class="detail-value" id="detail-severity">منخفض</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">تم التحقق منه:</span>
+                                <span class="detail-value" id="detail-verified">نعم</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">جلسة المستخدم:</span>
+                                <span class="detail-value" id="detail-session">٠٤٢٨٧٦٥٤</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">الموقع الجغرافي:</span>
+                                <span class="detail-value" id="detail-location">القاهرة، مصر</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="detail-actions">
+                    <button class="btn btn-secondary" id="print-details">
+                        <i class="fas fa-print"></i> طباعة
+                    </button>
+                    <button class="btn btn-primary" id="export-details">
+                        <i class="fas fa-download"></i> تصدير كـ JSON
+                    </button>
+                    <button class="btn btn-danger" id="flag-activity">
+                        <i class="fas fa-flag"></i> الإبلاغ عن نشاط مشبوه
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة تأكيد مسح السجل -->
+    <div class="modal-overlay" id="confirm-clear-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> تأكيد مسح سجل الأنشطة</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="warning-message">
+                    <i class="fas fa-trash-alt" style="color: #e74c3c; font-size: 48px;"></i>
+                    <h4>هل أنت متأكد من مسح سجل الأنشطة؟</h4>
+                    <p>هذا الإجراء <strong>لا يمكن التراجع عنه</strong>. سيتم حذف جميع سجلات الأنشطة الموجودة في النظام.</p>
+                    <div class="warning-details">
+                        <p><i class="fas fa-history"></i> إجمالي الأنشطة التي سيتم حذفها: <strong>٢,٤٥٦</strong></p>
+                        <p><i class="fas fa-calendar"></i> أقدم نشاط: <strong>٢٠٢٣-٠١-١٥</strong></p>
+                        <p><i class="fas fa-exclamation-triangle"></i> هذا الإجراء لا يمكن التراجع عنه!</p>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary close-modal">إلغاء</button>
+                    <button type="button" class="btn btn-danger" id="confirm-clear">نعم، مسح السجل</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // عرض التاريخ الحالي
+        const now = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-date').textContent = now.toLocaleDateString('ar-EG', options);
+
+        // تهيئة التواريخ في أدوات الفلترة
+        const today = new Date();
+        const monthAgo = new Date();
+        monthAgo.setDate(today.getDate() - 30);
+        
+        document.getElementById('date-from').valueAsDate = monthAgo;
+        document.getElementById('date-to').valueAsDate = today;
+
+        // تطبيق الفلترة
+        document.getElementById('apply-filters').addEventListener('click', function() {
+            const user = document.getElementById('user-filter').value;
+            const action = document.getElementById('action-filter').value;
+            const dateFrom = document.getElementById('date-from').value;
+            const dateTo = document.getElementById('date-to').value;
+            
+            console.log('فلترة:', { user, action, dateFrom, dateTo });
+            // هنا يمكنك إضافة منطق الفلترة
+        });
+
+        // إعادة تعيين الفلترة
+        document.getElementById('reset-filters').addEventListener('click', function() {
+            document.getElementById('user-filter').value = '';
+            document.getElementById('action-filter').value = '';
+            document.getElementById('date-from').valueAsDate = monthAgo;
+            document.getElementById('date-to').valueAsDate = today;
+        });
+
+        // تصدير السجل
+        document.getElementById('export-audit').addEventListener('click', function() {
+            alert('سيتم تصدير سجل الأنشكات بصيغة CSV...');
+        });
+
+        // مسح السجل
+        const clearBtn = document.getElementById('clear-audit');
+        const confirmModal = document.getElementById('confirm-clear-modal');
+        const closeModalBtns = document.querySelectorAll('.close-modal');
+        
+        clearBtn.addEventListener('click', () => {
+            confirmModal.style.display = 'flex';
+        });
+        
+        closeModalBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                confirmModal.style.display = 'none';
+                document.getElementById('details-modal').style.display = 'none';
+            });
+        });
+        
+        confirmModal.addEventListener('click', (e) => {
+            if (e.target === confirmModal) {
+                confirmModal.style.display = 'none';
+            }
+        });
+        
+        document.getElementById('confirm-clear').addEventListener('click', function() {
+            alert('تم مسح سجل الأنشكات بنجاح!');
+            confirmModal.style.display = 'none';
+        });
+
+        // عرض تفاصيل النشاط
+        const detailsModal = document.getElementById('details-modal');
+        const viewButtons = document.querySelectorAll('.btn-view, .btn-show-details');
+        const activityData = {
+            1: {
+                id: "#٠٠١",
+                timestamp: "٢٠٢٤-٠٥-٠١ ١٤:٣٠:٢٢",
+                type: "إضافة مستخدم",
+                status: "ناجح",
+                user: {
+                    name: "أحمد محمد",
+                    role: "مسؤول النظام",
+                    img: "https://ui-avatars.com/api/?name=أحمد+محمد&background=3498db&color=fff"
+                },
+                ip: "١٩٢.١٦٨.١.١٠٠",
+                browser: "Chrome ١٢٣",
+                os: "Windows ١٠",
+                content: "إضافة مستخدم جديد: تم إضافة المستخدم \"محمد شريف\" كـ \"طبيب\" في النظام.",
+                data: `{
+  "name": "محمد شريف",
+  "email": "mohamed.shareef@lab.com",
+  "role": "doctor",
+  "status": "active",
+  "created_at": "2024-05-01 14:30:22"
+}`,
+                severity: "منخفض",
+                verified: "نعم",
+                session: "٠٤٢٨٧٦٥٤",
+                location: "القاهرة، مصر"
+            },
+            2: {
+                id: "#٠٠٢",
+                timestamp: "٢٠٢٤-٠٥-٠١ ١٣:١٥:٤٥",
+                type: "إضافة مريض",
+                status: "ناجح",
+                user: {
+                    name: "سارة علي",
+                    role: "موظف استقبال",
+                    img: "https://ui-avatars.com/api/?name=سارة+علي&background=2ecc71&color=fff"
+                },
+                ip: "١٩٢.١٦٨.١.١٠١",
+                browser: "Firefox ١٢٢",
+                os: "Windows ١٠",
+                content: "تسجيل مريض جديد: تم تسجيل المريض \"علي حسن\" برقم ملف ٤٥٦٢٣.",
+                data: `{
+  "patient_id": "٤٥٦٢٣",
+  "name": "علي حسن",
+  "age": 45,
+  "gender": "ذكر",
+  "phone": "٠١٠٠١٢٣٤٥٦٧",
+  "created_at": "2024-05-01 13:15:45"
+}`,
+                severity: "منخفض",
+                verified: "نعم",
+                session: "٠٩٨٧٦٥٤٣",
+                location: "القاهرة، مصر"
+            }
+        };
+
+        viewButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const activityId = this.getAttribute('data-id') || 1;
+                const data = activityData[activityId];
+                
+                if (data) {
+                    document.getElementById('activity-id').textContent = activityId.toString().padStart(3, '٠');
+                    document.getElementById('detail-id').textContent = data.id;
+                    document.getElementById('detail-timestamp').textContent = data.timestamp;
+                    document.getElementById('detail-type').textContent = data.type;
+                    document.getElementById('detail-status').textContent = data.status;
+                    
+                    document.getElementById('detail-user').innerHTML = `
+                        <img src="${data.user.img}" alt="${data.user.name}">
+                        <div>
+                            <strong>${data.user.name}</strong>
+                            <small>${data.user.role}</small>
+                        </div>
+                    `;
+                    
+                    document.getElementById('detail-ip').textContent = data.ip;
+                    document.getElementById('detail-browser').textContent = data.browser;
+                    document.getElementById('detail-os').textContent = data.os;
+                    
+                    document.getElementById('detail-content').innerHTML = `
+                        <p><strong>الإجراء:</strong> ${data.type}</p>
+                        <p><strong>التفاصيل:</strong> ${data.content}</p>
+                        <p><strong>البيانات:</strong></p>
+                        <pre class="data-json">${data.data}</pre>
+                    `;
+                    
+                    document.getElementById('detail-severity').textContent = data.severity;
+                    document.getElementById('detail-verified').textContent = data.verified;
+                    document.getElementById('detail-session').textContent = data.session;
+                    document.getElementById('detail-location').textContent = data.location;
+                    
+                    detailsModal.style.display = 'flex';
+                }
+            });
+        });
+
+        detailsModal.addEventListener('click', (e) => {
+            if (e.target === detailsModal) {
+                detailsModal.style.display = 'none';
+            }
+        });
+
+        // تصدير تفاصيل النشاط
+        document.getElementById('export-details').addEventListener('click', function() {
+            alert('سيتم تصدير تفاصيل النشاط بصيغة JSON...');
+        });
+
+        // الإبلاغ عن نشاط مشبوه
+        document.getElementById('flag-activity').addEventListener('click', function() {
+            if (confirm('هل تريد الإبلاغ عن هذا النشاط كمشبوه؟')) {
+                alert('تم الإبلاغ عن النشاط بنجاح. سيقوم فريق الأمان بمراجعته.');
+            }
+        });
+
+        // الترقيم
+        const prevPageBtn = document.getElementById('prev-page');
+        const nextPageBtn = document.getElementById('next-page');
+        const currentPageSpan = document.getElementById('current-page');
+        const startRowSpan = document.getElementById('start-row');
+        const endRowSpan = document.getElementById('end-row');
+        const totalRowsSpan = document.getElementById('total-rows');
+        
+        let currentPage = 1;
+        const rowsPerPage = 8;
+        const totalRows = 2456;
+        
+        function updatePagination() {
+            const startRow = (currentPage - 1) * rowsPerPage + 1;
+            const endRow = Math.min(currentPage * rowsPerPage, totalRows);
+            
+            currentPageSpan.textContent = currentPage;
+            startRowSpan.textContent = startRow;
+            endRowSpan.textContent = endRow;
+            totalRowsSpan.textContent = totalRows;
+            
+            prevPageBtn.disabled = currentPage === 1;
+            nextPageBtn.disabled = endRow >= totalRows;
+        }
+        
+        prevPageBtn.addEventListener('click', function() {
+            if (currentPage > 1) {
+                currentPage--;
+                updatePagination();
+            }
+        });
+        
+        nextPageBtn.addEventListener('click', function() {
+            if (currentPage * rowsPerPage < totalRows) {
+                currentPage++;
+                updatePagination();
+            }
+        });
+        
+        // تهيئة الترقيم
+        updatePagination();
+
+        // بحث في الجدول
+        const searchInput = document.querySelector('.search input');
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = document.querySelectorAll('.audit-table tbody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+    </script>
+</body>
+</html>

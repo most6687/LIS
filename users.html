@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة المستخدمين - نظام معلومات المختبر</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="users.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- الشريط الجانبي (نفسه) -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-flask"></i>
+                <h2>نظام المختبر LIS</h2>
+            </div>
+            <ul class="menu">
+                <li><a href="index.html"><i class="fas fa-tachometer-alt"></i> لوحة التحكم</a></li>
+                <li class="active"><a href="users.html"><i class="fas fa-users"></i> إدارة المستخدمين</a></li>
+                <li><a href="permissions.html"><i class="fas fa-user-shield"></i> إدارة الصلاحيات</a></li>
+                <li><a href="statistics.html"><i class="fas fa-chart-bar"></i> الإحصائيات</a></li>
+                <li><a href="audit.html"><i class="fas fa-history"></i> Audit Trail</a></li>
+                <li><a href="patients.html"><i class="fas fa-user-injured"></i> المرضى</a></li>
+                <li><a href="inventory.html"><i class="fas fa-boxes"></i> المخزون</a></li>
+                <li><a href="reports.html"><i class="fas fa-file-pdf"></i> التقارير</a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> الإعدادات</a></li>
+            </ul>
+            <div class="user-info">
+                <img src="https://ui-avatars.com/api/?name=مسؤول+النظام&background=0D8ABC&color=fff" alt="صورة المستخدم">
+                <div>
+                    <h4>مسؤول النظام</h4>
+                    <p>Admin</p>
+                </div>
+                <a href="logout.html" class="logout"><i class="fas fa-sign-out-alt"></i></a>
+            </div>
+        </aside>
+
+        <!-- المحتوى الرئيسي -->
+        <main class="main-content">
+            <!-- الشريط العلوي -->
+            <header class="topbar">
+                <div class="search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="ابحث عن مستخدم...">
+                </div>
+                <div class="topbar-right">
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                    <div class="date-display">
+                        <i class="far fa-calendar-alt"></i>
+                        <span id="current-date">--/--/----</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- محتوى إدارة المستخدمين -->
+            <section class="users-management">
+                <div class="page-header">
+                    <h1><i class="fas fa-users"></i> إدارة المستخدمين</h1>
+                    <p>إدارة حسابات جميع مستخدمي النظام، يمكنك إضافة، تعديل أو حذف المستخدمين.</p>
+                </div>
+
+                <!-- أدوات التحكم -->
+                <div class="controls">
+                    <button class="btn btn-primary" id="add-user-btn">
+                        <i class="fas fa-user-plus"></i> إضافة مستخدم جديد
+                    </button>
+                    <div class="filters">
+                        <select id="role-filter">
+                            <option value="">جميع الأدوار</option>
+                            <option value="admin">مسؤول</option>
+                            <option value="receptionist">موظف استقبال</option>
+                            <option value="lab_tech">فني مختبر</option>
+                            <option value="doctor">طبيب</option>
+                            <option value="billing">موظف الفواتير</option>
+                            <option value="inventory">مدير المخزون</option>
+                        </select>
+                        <select id="status-filter">
+                            <option value="">جميع الحالات</option>
+                            <option value="active">نشط</option>
+                            <option value="inactive">غير نشط</option>
+                            <option value="pending">في انتظار التفعيل</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- جدول المستخدمين -->
+                <div class="table-container">
+                    <table class="users-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="select-all"></th>
+                                <th>المستخدم</th>
+                                <th>البريد الإلكتروني</th>
+                                <th>الدور</th>
+                                <th>الحالة</th>
+                                <th>تاريخ الإنشاء</th>
+                                <th>آخر نشاط</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- مستخدم 1 -->
+                            <tr>
+                                <td><input type="checkbox" class="user-checkbox"></td>
+                                <td>
+                                    <div class="user-cell">
+                                        <img src="https://ui-avatars.com/api/?name=أحمد+محمد&background=3498db&color=fff" alt="أحمد محمد">
+                                        <div>
+                                            <strong>أحمد محمد</strong>
+                                            <small>ID: USR001</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>ahmed.mohamed@lab.com</td>
+                                <td><span class="role-badge role-admin">مسؤول</span></td>
+                                <td><span class="status-badge status-active">نشط</span></td>
+                                <td>١٥/٠٣/٢٠٢٤</td>
+                                <td>منذ ٢ ساعة</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-icon btn-edit" title="تعديل">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-icon btn-delete" title="حذف">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                        <button class="btn-icon btn-reset" title="إعادة تعيين كلمة المرور">
+                                            <i class="fas fa-key"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- مستخدم 2 -->
+                            <tr>
+                                <td><input type="checkbox" class="user-checkbox"></td>
+                                <td>
+                                    <div class="user-cell">
+                                        <img src="https://ui-avatars.com/api/?name=سارة+علي&background=2ecc71&color=fff" alt="سارة علي">
+                                        <div>
+                                            <strong>سارة علي</strong>
+                                            <small>ID: USR002</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>sara.ali@lab.com</td>
+                                <td><span class="role-badge role-receptionist">موظف استقبال</span></td>
+                                <td><span class="status-badge status-active">نشط</span></td>
+                                <td>١٠/٠٢/٢٠٢٤</td>
+                                <td>منذ ٥ دقائق</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-icon btn-edit" title="تعديل">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-icon btn-delete" title="حذف">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                        <button class="btn-icon btn-reset" title="إعادة تعيين كلمة المرور">
+                                            <i class="fas fa-key"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- مستخدم 3 -->
+                            <tr>
+                                <td><input type="checkbox" class="user-checkbox"></td>
+                                <td>
+                                    <div class="user-cell">
+                                        <img src="https://ui-avatars.com/api/?name=خالد+فكري&background=e74c3c&color=fff" alt="خالد فكري">
+                                        <div>
+                                            <strong>خالد فكري</strong>
+                                            <small>ID: USR003</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>khaled.fekry@lab.com</td>
+                                <td><span class="role-badge role-lab-tech">فني مختبر</span></td>
+                                <td><span class="status-badge status-active">نشط</span></td>
+                                <td>٢٠/٠١/٢٠٢٤</td>
+                                <td>منذ يوم</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-icon btn-edit" title="تعديل">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-icon btn-delete" title="حذف">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                        <button class="btn-icon btn-reset" title="إعادة تعيين كلمة المرور">
+                                            <i class="fas fa-key"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- مستخدم 4 -->
+                            <tr>
+                                <td><input type="checkbox" class="user-checkbox"></td>
+                                <td>
+                                    <div class="user-cell">
+                                        <img src="https://ui-avatars.com/api/?name=محمد+شريف&background=9b59b6&color=fff" alt="محمد شريف">
+                                        <div>
+                                            <strong>محمد شريف</strong>
+                                            <small>ID: USR004</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>mohamed.shareef@lab.com</td>
+                                <td><span class="role-badge role-doctor">طبيب</span></td>
+                                <td><span class="status-badge status-active">نشط</span></td>
+                                <td>٠٥/٠٣/٢٠٢٤</td>
+                                <td>منذ ٣ أيام</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-icon btn-edit" title="تعديل">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-icon btn-delete" title="حذف">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                        <button class="btn-icon btn-reset" title="إعادة تعيين كلمة المرور">
+                                            <i class="fas fa-key"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- مستخدم 5 -->
+                            <tr>
+                                <td><input type="checkbox" class="user-checkbox"></td>
+                                <td>
+                                    <div class="user-cell">
+                                        <img src="https://ui-avatars.com/api/?name=فاطمة+رضا&background=f39c12&color=fff" alt="فاطمة رضا">
+                                        <div>
+                                            <strong>فاطمة رضا</strong>
+                                            <small>ID: USR005</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>fatma.reda@lab.com</td>
+                                <td><span class="role-badge role-billing">موظف الفواتير</span></td>
+                                <td><span class="status-badge status-inactive">غير نشط</span></td>
+                                <td>١٢/١٢/٢٠٢٣</td>
+                                <td>منذ شهر</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-icon btn-edit" title="تعديل">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-icon btn-delete" title="حذف">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                        <button class="btn-icon btn-reset" title="إعادة تعيين كلمة المرور">
+                                            <i class="fas fa-key"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- مستخدم 6 -->
+                            <tr>
+                                <td><input type="checkbox" class="user-checkbox"></td>
+                                <td>
+                                    <div class="user-cell">
+                                        <img src="https://ui-avatars.com/api/?name=ياسر+حسين&background=1abc9c&color=fff" alt="ياسر حسين">
+                                        <div>
+                                            <strong>ياسر حسين</strong>
+                                            <small>ID: USR006</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>yasser.hussein@lab.com</td>
+                                <td><span class="role-badge role-inventory">مدير المخزون</span></td>
+                                <td><span class="status-badge status-pending">في انتظار التفعيل</span></td>
+                                <td>٢٨/٠٤/٢٠٢٤</td>
+                                <td>--</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-icon btn-edit" title="تعديل">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-icon btn-delete" title="حذف">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                        <button class="btn-icon btn-reset" title="إعادة تعيين كلمة المرور">
+                                            <i class="fas fa-key"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- التذييل -->
+                <div class="table-footer">
+                    <div class="selected-count">
+                        <span id="selected-users">٠</span> مستخدم محدد
+                    </div>
+                    <div class="bulk-actions">
+                        <select id="bulk-action">
+                            <option value="">إجراء جماعي...</option>
+                            <option value="activate">تفعيل</option>
+                            <option value="deactivate">تعطيل</option>
+                            <option value="delete">حذف</option>
+                        </select>
+                        <button class="btn btn-secondary" id="apply-bulk">تطبيق</button>
+                    </div>
+                    <div class="pagination">
+                        <button class="page-btn" disabled><i class="fas fa-chevron-right"></i></button>
+                        <span class="page-numbers">
+                            <a href="#" class="active">١</a>
+                            <a href="#">٢</a>
+                            <a href="#">٣</a>
+                        </span>
+                        <button class="page-btn"><i class="fas fa-chevron-left"></i></button>
+                        <span class="page-info">عرض ١-٦ من ٢٤ مستخدم</span>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="footer">
+                <p>© ٢٠٢٤ نظام معلومات المختبر (LIS) - مشروع تخرج - جميع الحقوق محفوظة</p>
+                <p>الإصدار ٢.١.٠ | آخر تحديث: ٢٥ أبريل ٢٠٢٤</p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- نافذة إضافة/تعديل مستخدم -->
+    <div class="modal-overlay" id="user-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-plus"></i> إضافة مستخدم جديد</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="user-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="user-name"><i class="fas fa-user"></i> الاسم الكامل</label>
+                            <input type="text" id="user-name" placeholder="أدخل الاسم الكامل" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-email"><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+                            <input type="email" id="user-email" placeholder="example@lab.com" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="user-role"><i class="fas fa-user-tag"></i> الدور</label>
+                            <select id="user-role" required>
+                                <option value="">اختر الدور</option>
+                                <option value="admin">مسؤول</option>
+                                <option value="receptionist">موظف استقبال</option>
+                                <option value="lab_tech">فني مختبر</option>
+                                <option value="doctor">طبيب</option>
+                                <option value="billing">موظف الفواتير</option>
+                                <option value="inventory">مدير المخزون</option>
+                                <option value="lab_supervisor">مشرف مختبر</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-status"><i class="fas fa-circle"></i> الحالة</label>
+                            <select id="user-status" required>
+                                <option value="active">نشط</option>
+                                <option value="inactive">غير نشط</option>
+                                <option value="pending">في انتظار التفعيل</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="user-password"><i class="fas fa-key"></i> كلمة المرور</label>
+                        <input type="password" id="user-password" placeholder="أدخل كلمة مرور قوية" required>
+                        <small class="hint">يجب أن تحتوي على ٨ أحرف على الأقل، حرف كبير، ورقم</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-shield-alt"></i> الصلاحيات</label>
+                        <div class="permissions-checkboxes">
+                            <label><input type="checkbox" checked> إدارة المرضى</label>
+                            <label><input type="checkbox" checked> إضافة فحوصات</label>
+                            <label><input type="checkbox"> تعديل النتائج</label>
+                            <label><input type="checkbox"> إدارة المخزون</label>
+                            <label><input type="checkbox"> إدارة الفواتير</label>
+                            <label><input type="checkbox"> إنشاء تقارير</label>
+                            <label><input type="checkbox"> إدارة المستخدمين</label>
+                            <label><input type="checkbox"> صلاحيات كاملة</label>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary close-modal">إلغاء</button>
+                        <button type="submit" class="btn btn-primary">حفظ المستخدم</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // عرض التاريخ الحالي
+        const now = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-date').textContent = now.toLocaleDate('ar-EG', options);
+
+        // تفعيل النافذة المنبثقة
+        const addUserBtn = document.getElementById('add-user-btn');
+        const userModal = document.getElementById('user-modal');
+        const closeModalBtns = document.querySelectorAll('.close-modal');
+
+        addUserBtn.addEventListener('click', () => {
+            userModal.style.display = 'flex';
+        });
+
+        closeModalBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                userModal.style.display = 'none';
+            });
+        });
+
+        // إغلاق النافذة عند النقر خارجها
+        userModal.addEventListener('click', (e) => {
+            if (e.target === userModal) {
+                userModal.style.display = 'none';
+            }
+        });
+
+        // اختيار كل المستخدمين
+        const selectAll = document.getElementById('select-all');
+        const userCheckboxes = document.querySelectorAll('.user-checkbox');
+        const selectedCount = document.getElementById('selected-users');
+
+        selectAll.addEventListener('change', function() {
+            userCheckboxes.forEach(cb => {
+                cb.checked = this.checked;
+            });
+            updateSelectedCount();
+        });
+
+        userCheckboxes.forEach(cb => {
+            cb.addEventListener('change', updateSelectedCount);
+        });
+
+        function updateSelectedCount() {
+            const selected = document.querySelectorAll('.user-checkbox:checked').length;
+            selectedCount.textContent = selected;
+        }
+
+        // فلترة الجدول
+        const roleFilter = document.getElementById('role-filter');
+        const statusFilter = document.getElementById('status-filter');
+
+        function filterTable() {
+            const roleValue = roleFilter.value;
+            const statusValue = statusFilter.value;
+            
+            // هنا تكتب منطق الفلترة حسب الحاجة
+            console.log(`فلترة حسب الدور: ${roleValue}, الحالة: ${statusValue}`);
+        }
+
+        roleFilter.addEventListener('change', filterTable);
+        statusFilter.addEventListener('change', filterTable);
+
+        // حذف مستخدم مع تأكيد
+        const deleteButtons = document.querySelectorAll('.btn-delete');
+        deleteButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (confirm('هل أنت متأكد من حذف هذا المستخدم؟ لا يمكن التراجع عن هذا الإجراء.')) {
+                    const row = this.closest('tr');
+                    row.style.opacity = '0.5';
+                    setTimeout(() => {
+                        row.remove();
+                        updateSelectedCount();
+                    }, 300);
+                }
+            });
+        });
+
+        // تحرير مستخدم
+        const editButtons = document.querySelectorAll('.btn-edit');
+        editButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const row = this.closest('tr');
+                const userName = row.querySelector('strong').textContent;
+                const userEmail = row.cells[2].textContent;
+                
+                // تعبئة النموذج ببيانات المستخدم
+                document.getElementById('user-name').value = userName;
+                document.getElementById('user-email').value = userEmail;
+                document.querySelector('.modal-header h3').innerHTML = '<i class="fas fa-edit"></i> تعديل المستخدم';
+                
+                userModal.style.display = 'flex';
+            });
+        });
+    </script>
+</body>
+</html>
