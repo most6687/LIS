@@ -2,47 +2,89 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    protected $table = 'users';
+    protected $primaryKey = 'user_id';
+    protected $keyType = 'int';
+    public $incrementing = true;
+
     protected $fillable = [
-        'name',
-        'email',
+        'username',
         'password',
+        'role',
+        'full_name',
+        'email',
+        'phone',
+        'department',
+        'hire_date',
+        'is_active',
+        'last_login',
+        'permissions',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    protected $casts = [
+        'hire_date' => 'date',
+        'last_login' => 'datetime',
+        'is_active' => 'boolean',
+        'permissions' => 'array',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
+    ];
+
+    // bcrypt password عند التخزين تلقائي
+    public function setPasswordAttribute($value)
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        $this->attributes['password'] = bcrypt($value);
+    }
+
+    // العلاقات
+    public function tests()
+    {
+        return $this->hasMany(Test::class, 'user_id', 'user_id');
+    }
+
+    public function samples()
+    {
+        return $this->hasMany(Sample::class, 'user_id', 'user_id');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'user_id', 'user_id');
+    }
+
+    public function reports()
+    {
+        return $this->hasMany(Report::class, 'user_id', 'user_id');
+    }
+
+    // دوال مساعدة
+    public function isAdmin()
+    {
+        return $this->role === 'Admin';
+    }
+
+    public function isActive()
+    {
+        return $this->is_active;
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->full_name;
     }
 }
