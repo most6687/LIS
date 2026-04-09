@@ -12,8 +12,8 @@ return new class extends Migration {
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id('User_ID');
-            $table->string('Username', 50)->unique();
-            $table->string('Password', 250);
+            $table->string('username', 50)->unique();
+            $table->string('password', 250);
             $table->enum('Role', ['Admin', 'Receptionist', 'Technician', 'Billing', 'Inventory']);
             $table->string('Full_Name', 100);
             $table->string('Email', 100)->unique();
@@ -26,8 +26,6 @@ return new class extends Migration {
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
-
-
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

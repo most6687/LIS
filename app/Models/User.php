@@ -2,56 +2,62 @@
 
 namespace App\Models;
 
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\ActivityLog;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     protected $table = 'users';
-    protected $primaryKey = 'user_id';
+    protected $primaryKey = 'User_ID';
     protected $keyType = 'int';
     public $incrementing = true;
 
     protected $fillable = [
-        'username',
-        'password',
-        'role',
-        'full_name',
-        'email',
-        'phone',
-        'department',
-        'hire_date',
-        'is_active',
-        'last_login',
-        'permissions',
+        'Username',
+        'Password',
+        'Role',
+        'Full_Name',
+        'Email',
+        'Phone',
+        'Department',
+        'Hire_Date',
+        'Is_Active',
+        'Last_Login',
+        'Permissions',
     ];
 
     protected $hidden = [
-        'password',
+        'Password',
         'remember_token',
     ];
 
     protected $casts = [
-        'hire_date' => 'date',
-        'last_login' => 'datetime',
-        'is_active' => 'boolean',
-        'permissions' => 'array',
+        'Hire_Date' => 'date',
+        'Last_Login' => 'datetime',
+        'Is_Active' => 'boolean',
+        'Permissions' => 'array',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
     ];
 
-    // bcrypt password عند التخزين تلقائي
     public function setPasswordAttribute($value)
     {
-        $this->attributes['password'] = bcrypt($value);
+        $this->attributes['Password'] = bcrypt($value);
     }
 
-    // العلاقات
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
+
     public function tests()
     {
         return $this->hasMany(Test::class, 'user_id', 'user_id');
@@ -72,19 +78,34 @@ class User extends Authenticatable
         return $this->hasMany(Report::class, 'user_id', 'user_id');
     }
 
-    // دوال مساعدة
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'Role_ID', 'Role_ID');
+    }
+
+    public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class, 'User_ID');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Helper Functions
+    |--------------------------------------------------------------------------
+    */
+
     public function isAdmin()
     {
-        return $this->role === 'Admin';
+        return $this->Role === 'Admin';
     }
 
     public function isActive()
     {
-        return $this->is_active;
+        return $this->Is_Active;
     }
 
     public function getNameAttribute()
     {
-        return $this->full_name;
+        return $this->Full_Name;
     }
 }
